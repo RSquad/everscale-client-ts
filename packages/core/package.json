@@ -1,0 +1,18 @@
+{
+  "name": "@ton-client-ts/core",
+  "version": "1.0.0",
+  "description": "Zero dependency cross-platform bindings for TON-SDK written in TypeScript",
+  "main": "./dist/main.js",
+  "types": "./types",
+  "license": "Apache-2.0",
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "gitHead": "b71b93bd044a191914b250ff26d2919f645106f5",
+  "scripts": {
+    "build:webpack": "webpack --progress --mode production --config ../../webpack.config.node.js"
+  }
+}

@@ -1,0 +1,8 @@
+export const multisigAddress = "0:29af2121fc07700c9b51842a581b23316dcc5984ef4fd79f5c209eef19427565";
+export const multisigAccountId = "29af2121fc07700c9b51842a581b23316dcc5984ef4fd79f5c209eef19427565";
+export const multisigBase64 = "0QApryEh/AdwDJtRhCpYGyMxbcxZhO9P159cIJ7vGUJ1ZUiY";
+export const multisigBase64Url = "0QApryEh_AdwDJtRhCpYGyMxbcxZhO9P159cIJ7vGUJ1ZUiY";
+export const multisigBase64Bounceable = "kQApryEh/AdwDJtRhCpYGyMxbcxZhO9P159cIJ7vGUJ1ZRVd";
+export const multisigBase64BounceableUrl = "kQApryEh_AdwDJtRhCpYGyMxbcxZhO9P159cIJ7vGUJ1ZRVd";
+export const multisigPubkey = "06132cc76cd0ce1c9c685c647bc4d9f4b165ce060bbb9d547d064d4996176d9b";
+export const multisigSecretKey = "725c68199def529e99876d55125a802c2b911284fae92fec80da612065f82c57";

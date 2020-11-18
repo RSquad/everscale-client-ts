@@ -1,0 +1,19 @@
+{
+  "npmClient": "yarn",
+  "packages": [
+    "packages/core"
+  ],
+  "version": "4.0.1",
+  "useWorkspaces": true,
+  "command": {
+    "publish": {
+      "npmClient": "yarn",
+      "verifyAccess": false,
+      "ignoreChanges": [
+        "*.md",
+        "**/test/**"
+      ],
+      "message": "chore(release): publish %s"
+    }
+  }
+}
