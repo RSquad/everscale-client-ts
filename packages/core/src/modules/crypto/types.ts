@@ -1,3 +1,24 @@
+export type CryptoErrorCode =
+  | "InvalidPublicKey"
+  | "InvalidSecretKey"
+  | "InvalidKey"
+  | "InvalidFactorizeChallenge"
+  | "InvalidBigInt"
+  | "ScryptFailed"
+  | "InvalidKeySize"
+  | "NaclSecretBoxFailed"
+  | "NaclBoxFailed"
+  | "NaclSignFailed"
+  | "Bip39InvalidEntropy"
+  | "Bip39InvalidPhrase"
+  | "Bip32InvalidKey"
+  | "Bip32InvalidDerivePath"
+  | "Bip39InvalidDictionary"
+  | "Bip39InvalidWordCount"
+  | "MnemonicGenerationFailed"
+  | "MnemonicFromEntropyFailed"
+  | "SigningBoxNotRegistered";
+
 export type SigningBoxHandle = number;
 
 export type ParamsOfFactorize = {
@@ -38,7 +59,7 @@ export type ResultOfModularPower = {
 
 export type ParamsOfTonCrc16 = {
   /**
-   * data - Input data for CRC calculation. Encoded with `base64`.
+   * data - Input data for CRC calculation.
    */
   data: string;
 };
@@ -128,25 +149,25 @@ export type ResultOfVerifySignature = {
 
 export type ParamsOfHash = {
   /**
-   * data - Input data for hash calculation. Encoded with `base64`.
+   * data - Input data for hash calculation.
    */
   data: string;
 };
 
 export type ResultOfHash = {
   /**
-   * hash - Hash of input `data`. Encoded with 'hex'.
+   * hash - Hash of input `data`.
    */
   hash: string;
 };
 
 export type ParamsOfScrypt = {
   /**
-   * password - The password bytes to be hashed.
+   * password - The password bytes to be hashed. Must be encoded with `base64`.
    */
   password: string;
   /**
-   * salt - A salt bytes that modifies the hash to protect against Rainbow table attacks.
+   * salt - Salt bytes that modify the hash to protect against Rainbow table attacks. Must be encoded with `base64`.
    */
   salt: string;
   /**
@@ -169,7 +190,7 @@ export type ParamsOfScrypt = {
 
 export type ResultOfScrypt = {
   /**
-   * key - Derived key. Encoded with `hex`.
+   * key - Derived key.
    */
   key: string;
 };
@@ -201,7 +222,7 @@ export type ResultOfNaclSign = {
 
 export type ParamsOfNaclSignOpen = {
   /**
-   * signed - Signed data that must be unsigned. Encoded with `base64`.
+   * signed - Signed data that must be unsigned.
    */
   signed: string;
   /**
@@ -259,7 +280,7 @@ export type ResultOfNaclBox = {
 
 export type ParamsOfNaclBoxOpen = {
   /**
-   * encrypted - Data that must be decrypted. Encoded with `base64`.
+   * encrypted - Data that must be decrypted.
    */
   encrypted: string;
   nonce: string;
@@ -282,7 +303,7 @@ export type ResultOfNaclBoxOpen = {
 
 export type ParamsOfNaclSecretBox = {
   /**
-   * decrypted - Data that must be encrypted. Encoded with `base64`.
+   * decrypted - Data that must be encrypted.
    */
   decrypted: string;
   /**
@@ -297,7 +318,7 @@ export type ParamsOfNaclSecretBox = {
 
 export type ParamsOfNaclSecretBoxOpen = {
   /**
-   * encrypted - Data that must be decrypted. Encoded with `base64`.
+   * encrypted - Data that must be decrypted.
    */
   encrypted: string;
   /**
@@ -344,7 +365,7 @@ export type ResultOfMnemonicFromRandom = {
 
 export type ParamsOfMnemonicFromEntropy = {
   /**
-   * entropy - Entropy bytes. Hex encoded.
+   * entropy - Entropy bytes.
    */
   entropy: string;
   /**
@@ -381,7 +402,7 @@ export type ParamsOfMnemonicVerify = {
 
 export type ResultOfMnemonicVerify = {
   /**
-   * valid - Flag indicating the mnemonic is valid or not
+   * valid - Flag indicating if the mnemonic is valid or not
    */
   valid: boolean;
 };
@@ -497,22 +518,81 @@ export type ResultOfHDKeyPublicFromXPrv = {
 
 export type ParamsOfChaCha20 = {
   /**
-   * data - Source data to be encrypted or decrypted. Must be encoded with `base64`.
+   * data - Source data to be encrypted or decrypted.
    */
   data: string;
   /**
-   * key - 256-bit key. Must be encoded with `hex`.
+   * key - 256-bit key.
    */
   key: string;
   /**
-   * nonce - 96-bit nonce. Must be encoded with `hex`.
+   * nonce - 96-bit nonce.
    */
   nonce: string;
 };
 
 export type ResultOfChaCha20 = {
   /**
-   * data - Encrypted/decrypted data. Encoded with `base64`.
+   * data - Encrypted/decrypted data.
    */
   data: string;
+};
+
+export type RegisteredSigningBox = {
+  handle: SigningBoxHandle;
+};
+
+/**
+ * * GetPublicKey - Get signing box public key
+ * 
+ * * Sign - Sign data
+ * 
+
+*/
+export type ParamsOfAppSigningBox =
+  | {
+      type: "GetPublicKey";
+    }
+  | {
+      type: "Sign";
+      unsigned: string;
+    };
+
+/**
+ * * GetPublicKey - Result of getting public key
+ * 
+ * * Sign - Result of signing data
+ * 
+
+*/
+export type ResultOfAppSigningBox =
+  | {
+      type: "GetPublicKey";
+      public_key: string;
+    }
+  | {
+      type: "Sign";
+      signature: string;
+    };
+
+export type ResultOfSigningBoxGetPublicKey = {
+  /**
+   * pubkey - Public key of signing box.
+   */
+  pubkey: string;
+};
+
+export type ParamsOfSigningBoxSign = {
+  signing_box: SigningBoxHandle;
+  /**
+   * unsigned - Unsigned user data.
+   */
+  unsigned: string;
+};
+
+export type ResultOfSigningBoxSign = {
+  /**
+   * signature - Data signature.
+   */
+  signature: string;
 };

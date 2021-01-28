@@ -2,6 +2,7 @@ import { UtilsModule } from "./utils.module";
 import { ClientModule } from "./modules/client";
 import { NetModule } from "./modules/net";
 import { BocModule } from "./modules/boc";
+import { DebotModule } from "./modules/debot";
 import { CryptoModule } from "./modules/crypto";
 import { AbiModule } from "./modules/abi";
 import { ClientConfig } from "./modules/client/types";
@@ -42,6 +43,7 @@ export class TonClient {
   readonly net: NetModule;
   readonly boc: BocModule;
   readonly crypto: CryptoModule;
+  readonly debot: DebotModule;
   readonly abi: AbiModule;
   readonly processing: ProcessingModule;
   readonly tvm: TvmModule;
@@ -64,6 +66,7 @@ export class TonClient {
     this.net = new NetModule(this);
     this.boc = new BocModule(this);
     this.crypto = new CryptoModule(this);
+    this.debot = new DebotModule(this);
     this.abi = new AbiModule(this);
     this.processing = new ProcessingModule(this);
     this.tvm = new TvmModule(this);

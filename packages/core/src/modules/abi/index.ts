@@ -16,11 +16,7 @@ import {
 } from "./types";
 
 /**
- * Provides message encoding and decoding according to the ABI
- *
- * @remarks
- * Provides message encoding and decoding according to the ABI
- * specification.
+ * Provides message encoding and decoding according to the ABI specification.
  */
 export class AbiModule {
   tonClient: TonClient;
@@ -29,9 +25,6 @@ export class AbiModule {
   }
 
   /**
-   * Encodes message body according to ABI function call.
-   *
-   * @remarks
    * Encodes message body according to ABI function call.
    *
    * @param {ParamsOfEncodeMessageBody} param - parameters
@@ -56,8 +49,6 @@ export class AbiModule {
    * Encodes an ABI-compatible message
    *
    * @remarks
-   * Encodes an ABI-compatible message
-   *
    * Allows to encode deploy and function call messages,
    * both signed and unsigned.
    *
@@ -91,11 +82,7 @@ export class AbiModule {
   }
 
   /**
-   * Combines `hex`-encoded `signature` with `base64`-encoded `unsigned_message`.
-   *
-   * @remarks
-   * Combines `hex`-encoded `signature` with `base64`-encoded `unsigned_message`.
-   * Returns signed message encoded in `base64`.
+   * Combines `hex`-encoded `signature` with `base64`-encoded `unsigned_message`. Returns signed message encoded in `base64`.
    *
    * @param {ParamsOfAttachSignature} param - parameters
    * @returns ResultOfAttachSignature
@@ -109,9 +96,6 @@ export class AbiModule {
   /**
    * Decodes message body using provided message BOC and ABI.
    *
-   * @remarks
-   * Decodes message body using provided message BOC and ABI.
-   *
    * @param {ParamsOfDecodeMessage} param - parameters
    * @returns DecodedMessageBody
    */
@@ -120,9 +104,6 @@ export class AbiModule {
   }
 
   /**
-   * Decodes message body using provided body BOC and ABI.
-   *
-   * @remarks
    * Decodes message body using provided body BOC and ABI.
    *
    * @param {ParamsOfDecodeMessageBody} param - parameters
@@ -138,8 +119,6 @@ export class AbiModule {
    * Creates account state BOC
    *
    * @remarks
-   * Creates account state BOC
-   *
    * Creates account state provided with one of these sets of data :
    * 1. BOC of code, BOC of data, BOC of library
    * 2. TVC (string in `base64`), keys, init params

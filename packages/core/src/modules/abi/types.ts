@@ -1,29 +1,50 @@
 import { KeyPair, SigningBoxHandle } from "../crypto/types";
 
+export type AbiErrorCode =
+  | "RequiredAddressMissingForEncodeMessage"
+  | "RequiredCallSetMissingForEncodeMessage"
+  | "InvalidJson"
+  | "InvalidMessage"
+  | "EncodeDeployMessageFailed"
+  | "EncodeRunMessageFailed"
+  | "AttachSignatureFailed"
+  | "InvalidTvcImage"
+  | "RequiredPublicKeyMissingForFunctionHeader"
+  | "InvalidSigner"
+  | "InvalidAbi";
+
 export type Abi =
   | {
       type: "Contract";
       value: AbiContract;
     }
   | {
+      type: "Json";
+      value: string;
+    }
+  | {
       type: "Handle";
       value: AbiHandle;
+    }
+  | {
+      type: "Serialized";
+      value: AbiContract;
     };
 
 export type AbiHandle = number;
 
 /**
- * The ABI function header.
- *
  * Includes several hidden function parameters that contract
  *
- * uses for security and replay protection reasons.
+ * uses for security, message delivery monitoring and replay protection reasons.
  *
  * The actual set of header fields depends on the contract's ABI.
+ *
+ * If a contract's ABI does not include some headers, then they are not filled.
  */
 export type FunctionHeader = {
   /**
-   * expire - Message expiration time in seconds.
+   * expire - Message expiration time in seconds. If not specified - calculated automatically from message_expiration_timeout(), try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
    */
   expire?: number;
   /**
@@ -31,7 +52,7 @@ export type FunctionHeader = {
    */
   time?: number;
   /**
-   * pubkey - Public key used to sign message. Encoded with `hex`.
+   * pubkey - Public key is used by the contract to check the signature.
    */
   pubkey?: string;
 };
@@ -57,7 +78,7 @@ export type DeploySet = {
    */
   tvc: string;
   /**
-   * workchain_id - Target workchain for destination address. Default is `0`.
+   * workchain_id - Target workchain for destination address.
    */
   workchain_id?: number;
   /**
@@ -67,13 +88,13 @@ export type DeploySet = {
 };
 
 /**
- * * None - No keys are provided. Creates an unsigned message.
+ * * None - No keys are provided.
  * 
- * * External - Only public key is provided to generate unsigned message and `data_to_sign`
+ * * External - Only public key is provided in unprefixed hex string format to generate unsigned message and `data_to_sign` which can be signed later.
  * 
  * * Keys - Key pair is provided for signing
  * 
- * * SigningBox - Signing Box interface is provided for signing, allows Dapps to sign messages using external APIs,
+ * * SigningBox - Signing Box interface is provided for signing, allows Dapps to sign messages using external APIs, such as HSM, cold wallet, etc.
  * 
 
 */
@@ -95,16 +116,8 @@ export type Signer =
     };
 
 /**
- * Input -  Message contains the input of the ABI function.
- * 
- * Output -  Message contains the output of the ABI function.
- * 
- * InternalOutput -  Message contains the input of the imported ABI function.
-
- Occurs when contract sends an internal message to other
- contract.
- * 
- * Event -  Message contains the input of the ABI event.
+ * InternalOutput - Occurs when contract sends an internal message to other
+contract.
 */
 export type MessageBodyType = "Input" | "Output" | "InternalOutput" | "Event";
 
@@ -113,7 +126,7 @@ export type MessageBodyType = "Input" | "Output" | "InternalOutput" | "Event";
  * 
  * * StateInit - State init data.
  * 
- * * Tvc - Content of the TVC file. Encoded in `base64`.
+ * * Tvc - Content of the TVC file.
  * 
 
 */
@@ -160,7 +173,7 @@ export type AbiParam = {
 export type AbiEvent = {
   name: string;
   inputs: AbiParam[];
-  id?: number;
+  id?: string;
 };
 
 export type AbiData = {
@@ -174,11 +187,12 @@ export type AbiFunction = {
   name: string;
   inputs: AbiParam[];
   outputs: AbiParam[];
-  id?: number;
+  id?: string;
 };
 
 export type AbiContract = {
-  "ABI version": number;
+  "ABI version"?: number;
+  abi_version?: number;
   header?: string[];
   functions?: AbiFunction[];
   events?: AbiEvent[];
@@ -205,7 +219,7 @@ export type ResultOfEncodeMessageBody = {
    */
   body: string;
   /**
-   * data_to_sign - Optional data to sign. Encoded with `base64`.
+   * data_to_sign - Optional data to sign.
    */
   data_to_sign?: string;
 };
@@ -213,15 +227,15 @@ export type ResultOfEncodeMessageBody = {
 export type ParamsOfAttachSignatureToMessageBody = {
   abi: Abi;
   /**
-   * public_key - Public key. Must be encoded with `hex`.
+   * public_key - Public key.
    */
   public_key: string;
   /**
-   * message - Unsigned message BOC. Must be encoded with `base64`.
+   * message - Unsigned message body BOC.
    */
   message: string;
   /**
-   * signature - Signature. Must be encoded with `hex`.
+   * signature - Signature.
    */
   signature: string;
 };

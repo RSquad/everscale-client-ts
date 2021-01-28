@@ -3,12 +3,10 @@ import {
   ResultOfGetApiReference,
   ResultOfVersion,
   ResultOfBuildInfo,
+  ParamsOfResolveAppRequest,
 } from "./types";
 
 /**
- * Provides information about library.
- *
- * @remarks
  * Provides information about library.
  */
 export class ClientModule {
@@ -19,18 +17,12 @@ export class ClientModule {
 
   /**
    * Returns Core Library API reference
-   *
-   * @remarks
-   * Returns Core Library API reference
    */
   get_api_reference(): Promise<ResultOfGetApiReference> {
     return this.tonClient.request("client.get_api_reference");
   }
 
   /**
-   * Returns Core Library version
-   *
-   * @remarks
    * Returns Core Library version
    */
   version(): Promise<ResultOfVersion> {
@@ -39,11 +31,17 @@ export class ClientModule {
 
   /**
    * Returns detailed information about this build.
-   *
-   * @remarks
-   * Returns detailed information about this build.
    */
   build_info(): Promise<ResultOfBuildInfo> {
     return this.tonClient.request("client.build_info");
+  }
+
+  /**
+   * Resolves application request processing result
+   *
+   * @param {ParamsOfResolveAppRequest} param - parameters
+   */
+  resolve_app_request(params: ParamsOfResolveAppRequest): Promise<undefined> {
+    return this.tonClient.request("client.resolve_app_request", params);
   }
 }

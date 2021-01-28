@@ -3,9 +3,6 @@ import { ParamsOfConvertAddress, ResultOfConvertAddress } from "./types";
 
 /**
  * Misc utility Functions.
- *
- * @remarks
- * Misc utility Functions.
  */
 export class UtilsModule {
   tonClient: TonClient;
@@ -14,9 +11,6 @@ export class UtilsModule {
   }
 
   /**
-   * Converts address from any TON format to any TON format
-   *
-   * @remarks
    * Converts address from any TON format to any TON format
    *
    * @param {ParamsOfConvertAddress} param - parameters

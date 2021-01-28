@@ -95,7 +95,7 @@ test("subscribe_collection", async () => {
       },
       result: "created_at",
     },
-    async (response) => {
+    async (response: any) => {
       results.push(response);
       if (Date.now() > now + 30000) {
         await tonClient.net.unsubscribe(handle);

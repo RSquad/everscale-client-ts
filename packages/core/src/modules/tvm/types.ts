@@ -1,6 +1,22 @@
 import { Abi } from "../abi/types";
 import { DecodedOutput } from "../processing/types";
 
+export type TvmErrorCode =
+  | "CanNotReadTransaction"
+  | "CanNotReadBlockchainConfig"
+  | "TransactionAborted"
+  | "InternalError"
+  | "ActionPhaseFailed"
+  | "AccountCodeMissing"
+  | "LowBalance"
+  | "AccountFrozenOrDeleted"
+  | "AccountMissing"
+  | "UnknownExecutionError"
+  | "InvalidInputStack"
+  | "InvalidAccountBoc"
+  | "InvalidMessageType"
+  | "ContractExecutionError";
+
 export type ExecutionOptions = {
   /**
    * blockchain_config - boc with config
@@ -21,9 +37,9 @@ export type ExecutionOptions = {
 };
 
 /**
- * * None - Non-existing account to run a creation internal message.
+ * * None - Non-existing account to run a creation internal message. Should be used with `skip_transaction_check = true` if the message has no deploy data since transactions on the uninitialized account are always aborted
  * 
- * * Uninit - Emulate unitialized account to run deploy message
+ * * Uninit - Emulate uninitialized account to run deploy message
  * 
  * * Account - Account state to run message
  * 
@@ -53,7 +69,7 @@ export type TransactionFees = {
 
 export type ParamsOfRunExecutor = {
   /**
-   * message - Input message BOC. Must be encoded as base64.
+   * message - Input message BOC.
    */
   message: string;
   account: AccountForExecutor;
@@ -74,15 +90,15 @@ export type ParamsOfRunExecutor = {
 export type ResultOfRunExecutor = {
   transaction: any;
   /**
-   * out_messages - List of output messages' BOCs. Encoded as `base64`
+   * out_messages - List of output messages' BOCs.
    */
   out_messages: string[];
   /**
-   * decoded - Optional decoded message bodies according to the optional
+   * decoded - Optional decoded message bodies according to the optional `abi` parameter.
    */
   decoded?: DecodedOutput;
   /**
-   * account - Updated account state BOC. Encoded as `base64`
+   * account - Updated account state BOC.
    */
   account: string;
   fees: TransactionFees;
@@ -90,11 +106,11 @@ export type ResultOfRunExecutor = {
 
 export type ParamsOfRunTvm = {
   /**
-   * message - Input message BOC. Must be encoded as base64.
+   * message - Input message BOC.
    */
   message: string;
   /**
-   * account - Account BOC. Must be encoded as base64.
+   * account - Account BOC.
    */
   account: string;
   /**
@@ -109,15 +125,15 @@ export type ParamsOfRunTvm = {
 
 export type ResultOfRunTvm = {
   /**
-   * out_messages - List of output messages' BOCs. Encoded as `base64`
+   * out_messages - List of output messages' BOCs.
    */
   out_messages: string[];
   /**
-   * decoded - Optional decoded message bodies according to the optional
+   * decoded - Optional decoded message bodies according to the optional `abi` parameter.
    */
   decoded?: DecodedOutput;
   /**
-   * account - Updated account state BOC. Encoded as `base64`.
+   * account - Updated account state BOC.
    */
   account: string;
 };

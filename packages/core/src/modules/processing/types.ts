@@ -1,20 +1,36 @@
 import { ClientError } from "../client/types";
 import { TransactionFees } from "../tvm/types";
 import { DecodedMessageBody, Abi, ParamsOfEncodeMessage } from "../abi/types";
+
+export type ProcessingErrorCode =
+  | "MessageAlreadyExpired"
+  | "MessageHasNotDestinationAddress"
+  | "CanNotBuildMessageCell"
+  | "FetchBlockFailed"
+  | "SendMessageFailed"
+  | "InvalidMessageBoc"
+  | "MessageExpired"
+  | "TransactionWaitTimeout"
+  | "InvalidBlockReceived"
+  | "CanNotCheckBlockShard"
+  | "BlockNotFound"
+  | "InvalidData"
+  | "ExternalSignerMustNotBeUsed";
+
 /**
- * * WillFetchFirstBlock - Notifies the app that the current shard block will be fetched
+ * * WillFetchFirstBlock - Notifies the app that the current shard block will be fetched from the network.
  * 
- * * FetchFirstBlockFailed - Notifies the app that the client has failed to fetch current
+ * * FetchFirstBlockFailed - Notifies the app that the client has failed to fetch current shard block.
  * 
- * * WillSend - Notifies the app that the message will be sent to the
+ * * WillSend - Notifies the app that the message will be sent to the network.
  * 
  * * DidSend - Notifies the app that the message was sent to the network.
  * 
- * * SendFailed - Notifies the app that the sending operation was failed with
+ * * SendFailed - Notifies the app that the sending operation was failed with network error.
  * 
- * * WillFetchNextBlock - Notifies the app that the next shard block will be fetched
+ * * WillFetchNextBlock - Notifies the app that the next shard block will be fetched from the network.
  * 
- * * FetchNextBlockFailed - Notifies the app that the next block can't be fetched due to
+ * * FetchNextBlockFailed - Notifies the app that the next block can't be fetched due to error.
  * 
  * * MessageExpired - Notifies the app that the message was expired.
  * 
@@ -70,11 +86,11 @@ export type ProcessingEvent =
 export type ResultOfProcessMessage = {
   transaction: any;
   /**
-   * out_messages - List of output messages' BOCs. Encoded as `base64`
+   * out_messages - List of output messages' BOCs.
    */
   out_messages: string[];
   /**
-   * decoded - Optional decoded message bodies according to the optional
+   * decoded - Optional decoded message bodies according to the optional `abi` parameter.
    */
   decoded?: DecodedOutput;
   fees: TransactionFees;
@@ -108,7 +124,7 @@ export type ParamsOfSendMessage = {
 
 export type ResultOfSendMessage = {
   /**
-   * shard_block_id - The last generated shard block of the message destination account before the
+   * shard_block_id - The last generated shard block of the message destination account before the message was sent.
    */
   shard_block_id: string;
 };
@@ -119,7 +135,7 @@ export type ParamsOfWaitForTransaction = {
    */
   abi?: Abi;
   /**
-   * message - Message BOC. Encoded with `base64`.
+   * message - Message BOC.
    */
   message: string;
   /**

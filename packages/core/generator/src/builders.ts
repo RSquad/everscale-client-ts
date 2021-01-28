@@ -57,7 +57,7 @@ export function buildApiSubtype(apiType: any, definitions: any) {
       return {
         description: apiType.summary ? `* ${apiType.name} - ${apiType.summary.trim()} \n` : "",
         body: optionalInner.body,
-        name: `${apiType.name}?`,
+        name: /\s/.test(apiType.name) ? `"${apiType.name}"?` : `${apiType.name}?`,
       };
     case "BigInt":
       return {
@@ -216,7 +216,10 @@ export function methodTemplate(data) {
 
       if (paramsDescription.length) {
         description += ` *\n`;
-        description += ` * ${paramsDescription.map((str) => str.trim()).join("\n * ")}\n`;
+        description += ` * ${paramsDescription
+          .filter(Boolean)
+          .map((str) => str.trim())
+          .join("\n * ")}\n`;
       }
 
       const returnDep = data.definitions[data.result.generic_args[0].ref_name];

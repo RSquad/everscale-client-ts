@@ -1,9 +1,38 @@
+export type NetErrorCode =
+  | "QueryFailed"
+  | "SubscribeFailed"
+  | "WaitForFailed"
+  | "GetSubscriptionResultFailed"
+  | "InvalidServerResponse"
+  | "ClockOutOfSync"
+  | "WaitForTimeout"
+  | "GraphqlError"
+  | "NetworkModuleSuspended"
+  | "WebsocketDisconnected"
+  | "NotSupported"
+  | "NoEndpointsProvided";
+
 export type OrderBy = {
   path: string;
   direction: SortDirection;
 };
 
 export type SortDirection = "ASC" | "DESC";
+
+export type ParamsOfQuery = {
+  /**
+   * query - GraphQL query text.
+   */
+  query: string;
+  /**
+   * variables - Variables used in query.
+   */
+  variables?: any;
+};
+
+export type ResultOfQuery = {
+  result: any;
+};
 
 export type ParamsOfQueryCollection = {
   /**
@@ -60,12 +89,10 @@ export type ResultOfWaitForCollection = {
 
 export type ResultOfSubscribeCollection = {
   /**
-   * handle - Subscription handle. Must be closed with `unsubscribe`
+   * handle - Subscription handle.
    */
   handle: number;
 };
-
-export type unit = void;
 
 export type ParamsOfSubscribeCollection = {
   /**
@@ -80,4 +107,25 @@ export type ParamsOfSubscribeCollection = {
    * result - Projection (result) string
    */
   result: string;
+};
+
+export type ParamsOfFindLastShardBlock = {
+  /**
+   * address - Account address
+   */
+  address: string;
+};
+
+export type ResultOfFindLastShardBlock = {
+  /**
+   * block_id - Account shard last block ID
+   */
+  block_id: string;
+};
+
+export type EndpointsSet = {
+  /**
+   * endpoints - List of endpoints provided by server
+   */
+  endpoints: string[];
 };

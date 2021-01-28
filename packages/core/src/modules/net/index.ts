@@ -1,17 +1,19 @@
 import { TonClient, ResponseHandler } from "../..";
 import {
+  ParamsOfQuery,
+  ResultOfQuery,
   ParamsOfQueryCollection,
   ResultOfQueryCollection,
   ParamsOfWaitForCollection,
   ResultOfWaitForCollection,
   ResultOfSubscribeCollection,
   ParamsOfSubscribeCollection,
+  ParamsOfFindLastShardBlock,
+  ResultOfFindLastShardBlock,
+  EndpointsSet,
 } from "./types";
 
 /**
- * Network access.
- *
- * @remarks
  * Network access.
  */
 export class NetModule {
@@ -21,14 +23,22 @@ export class NetModule {
   }
 
   /**
+   * Performs DAppServer GraphQL query.
+   *
+   * @param {ParamsOfQuery} param - parameters
+   * @returns ResultOfQuery
+   */
+  query(params: ParamsOfQuery): Promise<ResultOfQuery> {
+    return this.tonClient.request("net.query", params);
+  }
+
+  /**
    * Queries collection data
    *
    * @remarks
-   * Queries collection data
-   *
    * Queries data that satisfies the `filter` conditions,
    * limits the number of returned records and orders them.
-   * The projection fields are limited to  `result` fields
+   * The projection fields are limited to `result` fields
    *
    * @param {ParamsOfQueryCollection} param - parameters
    * @returns ResultOfQueryCollection
@@ -43,14 +53,12 @@ export class NetModule {
    * Returns an object that fulfills the conditions or waits for its appearance
    *
    * @remarks
-   * Returns an object that fulfills the conditions or waits for its appearance
-   *
    * Triggers only once.
    * If object that satisfies the `filter` conditions
    * already exists - returns it immediately.
-   * If not - waits for insert/update of data withing the specified `timeout`,
+   * If not - waits for insert/update of data within the specified `timeout`,
    * and returns it.
-   * The projection fields are limited to  `result` fields
+   * The projection fields are limited to `result` fields
    *
    * @param {ParamsOfWaitForCollection} param - parameters
    * @returns ResultOfWaitForCollection
@@ -65,8 +73,6 @@ export class NetModule {
    * Cancels a subscription
    *
    * @remarks
-   * Cancels a subscription
-   *
    * Cancels a subscription specified by its handle.
    *
    * @param {ResultOfSubscribeCollection} param - parameters
@@ -79,11 +85,9 @@ export class NetModule {
    * Creates a subscription
    *
    * @remarks
-   * Creates a subscription
-   *
    * Triggers for each insert/update of data
    * that satisfies the `filter` conditions.
-   * The projection fields are limited to  `result` fields.
+   * The projection fields are limited to `result` fields.
    *
    * @param {ParamsOfSubscribeCollection} param - parameters
    * @param {Request} responseHandler - Request callback
@@ -98,5 +102,47 @@ export class NetModule {
       params,
       responseHandler
     );
+  }
+
+  /**
+   * Suspends network module to stop any network activity
+   */
+  suspend(): Promise<undefined> {
+    return this.tonClient.request("net.suspend");
+  }
+
+  /**
+   * Resumes network module to enable network activity
+   */
+  resume(): Promise<undefined> {
+    return this.tonClient.request("net.resume");
+  }
+
+  /**
+   * Returns ID of the last block in a specified account shard
+   *
+   * @param {ParamsOfFindLastShardBlock} param - parameters
+   * @returns ResultOfFindLastShardBlock
+   */
+  find_last_shard_block(
+    params: ParamsOfFindLastShardBlock
+  ): Promise<ResultOfFindLastShardBlock> {
+    return this.tonClient.request("net.find_last_shard_block", params);
+  }
+
+  /**
+   * Requests the list of alternative endpoints from server
+   */
+  fetch_endpoints(): Promise<EndpointsSet> {
+    return this.tonClient.request("net.fetch_endpoints");
+  }
+
+  /**
+   * Sets the list of endpoints to use on reinit
+   *
+   * @param {EndpointsSet} param - parameters
+   */
+  set_endpoints(params: EndpointsSet): Promise<undefined> {
+    return this.tonClient.request("net.set_endpoints", params);
   }
 }

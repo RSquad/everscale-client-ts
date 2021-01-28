@@ -53,12 +53,15 @@ import {
   ResultOfHDKeyPublicFromXPrv,
   ParamsOfChaCha20,
   ResultOfChaCha20,
+  ParamsOfAppSigningBox,
+  ResultOfAppSigningBox,
+  RegisteredSigningBox,
+  ResultOfSigningBoxGetPublicKey,
+  ParamsOfSigningBoxSign,
+  ResultOfSigningBoxSign,
 } from "./types";
 
 /**
- * Crypto functions.
- *
- * @remarks
  * Crypto functions.
  */
 export class CryptoModule {
@@ -68,12 +71,7 @@ export class CryptoModule {
   }
 
   /**
-   * Integer factorization
-   *
-   * @remarks
-   * Performs prime factorization – decomposition of a composite number
-   * into a product of smaller prime integers (factors).
-   * See [https://en.wikipedia.org/wiki/Integer_factorization]
+   * Performs prime factorization – decomposition of a composite number into a product of smaller prime integers (factors). See [https://en.wikipedia.org/wiki/Integer_factorization]
    *
    * @param {ParamsOfFactorize} param - parameters
    * @returns ResultOfFactorize
@@ -83,11 +81,7 @@ export class CryptoModule {
   }
 
   /**
-   * Modular exponentiation
-   *
-   * @remarks
-   * Performs modular exponentiation for big integers (`base`^`exponent` mod `modulus`).
-   * See [https://en.wikipedia.org/wiki/Modular_exponentiation]
+   * Performs modular exponentiation for big integers (`base`^`exponent` mod `modulus`). See [https://en.wikipedia.org/wiki/Modular_exponentiation]
    *
    * @param {ParamsOfModularPower} param - parameters
    * @returns ResultOfModularPower
@@ -97,9 +91,6 @@ export class CryptoModule {
   }
 
   /**
-   * Calculates CRC16 using TON algorithm.
-   *
-   * @remarks
    * Calculates CRC16 using TON algorithm.
    *
    * @param {ParamsOfTonCrc16} param - parameters
@@ -112,9 +103,6 @@ export class CryptoModule {
   /**
    * Generates random byte array of the specified length and returns it in `base64` format
    *
-   * @remarks
-   * Generates random byte array of the specified length and returns it in `base64` format
-   *
    * @param {ParamsOfGenerateRandomBytes} param - parameters
    * @returns ResultOfGenerateRandomBytes
    */
@@ -125,9 +113,6 @@ export class CryptoModule {
   }
 
   /**
-   * Converts public key to ton safe_format
-   *
-   * @remarks
    * Converts public key to ton safe_format
    *
    * @param {ParamsOfConvertPublicKeyToTonSafeFormat} param - parameters
@@ -144,18 +129,12 @@ export class CryptoModule {
 
   /**
    * Generates random ed25519 key pair.
-   *
-   * @remarks
-   * Generates random ed25519 key pair.
    */
   generate_random_sign_keys(): Promise<KeyPair> {
     return this.tonClient.request("crypto.generate_random_sign_keys");
   }
 
   /**
-   * Signs a data using the provided keys.
-   *
-   * @remarks
    * Signs a data using the provided keys.
    *
    * @param {ParamsOfSign} param - parameters
@@ -166,11 +145,7 @@ export class CryptoModule {
   }
 
   /**
-   * Verifies signed data using the provided public key.
-   *
-   * @remarks
-   * Verifies signed data using the provided public key.
-   * Raises error if verification is failed.
+   * Verifies signed data using the provided public key. Raises error if verification is failed.
    *
    * @param {ParamsOfVerifySignature} param - parameters
    * @returns ResultOfVerifySignature
@@ -184,9 +159,6 @@ export class CryptoModule {
   /**
    * Calculates SHA256 hash of the specified data.
    *
-   * @remarks
-   * Calculates SHA256 hash of the specified data.
-   *
    * @param {ParamsOfHash} param - parameters
    * @returns ResultOfHash
    */
@@ -197,9 +169,6 @@ export class CryptoModule {
   /**
    * Calculates SHA512 hash of the specified data.
    *
-   * @remarks
-   * Calculates SHA512 hash of the specified data.
-   *
    * @param {ParamsOfHash} param - parameters
    * @returns ResultOfHash
    */
@@ -208,12 +177,9 @@ export class CryptoModule {
   }
 
   /**
-   * Perform `scrypt` encryption
+   * Derives key from `password` and `key` using `scrypt` algorithm. See [https://en.wikipedia.org/wiki/Scrypt].
    *
    * @remarks
-   * Derives key from `password` and `key` using `scrypt` algorithm.
-   * See [https://en.wikipedia.org/wiki/Scrypt].
-   *
    * # Arguments
    * - `log_n` - The log2 of the Scrypt parameter `N`
    * - `r` - The Scrypt parameter `r`
@@ -237,9 +203,6 @@ export class CryptoModule {
   /**
    * Generates a key pair for signing from the secret key
    *
-   * @remarks
-   * Generates a key pair for signing from the secret key
-   *
    * @param {ParamsOfNaclSignKeyPairFromSecret} param - parameters
    * @returns KeyPair
    */
@@ -255,9 +218,6 @@ export class CryptoModule {
   /**
    * Signs data using the signer's secret key.
    *
-   * @remarks
-   * Signs data using the signer's secret key.
-   *
    * @param {ParamsOfNaclSign} param - parameters
    * @returns ResultOfNaclSign
    */
@@ -265,24 +225,46 @@ export class CryptoModule {
     return this.tonClient.request("crypto.nacl_sign", params);
   }
 
+  /**
+   * Verifies the signature and returns the unsigned message
+   *
+   * @remarks
+   * Verifies the signature in `signed` using the signer's public key `public`
+   * and returns the message `unsigned`.
+   *
+   * If the signature fails verification, crypto_sign_open raises an exception.
+   *
+   * @param {ParamsOfNaclSignOpen} param - parameters
+   * @returns ResultOfNaclSignOpen
+   */
   nacl_sign_open(params: ParamsOfNaclSignOpen): Promise<ResultOfNaclSignOpen> {
     return this.tonClient.request("crypto.nacl_sign_open", params);
   }
 
+  /**
+   * Signs the message using the secret key and returns a signature.
+   *
+   * @remarks
+   * Signs the message `unsigned` using the secret key `secret`
+   * and returns a signature `signature`.
+   *
+   * @param {ParamsOfNaclSign} param - parameters
+   * @returns ResultOfNaclSignDetached
+   */
   nacl_sign_detached(
     params: ParamsOfNaclSign
   ): Promise<ResultOfNaclSignDetached> {
     return this.tonClient.request("crypto.nacl_sign_detached", params);
   }
 
+  /**
+   * Generates a random NaCl key pair
+   */
   nacl_box_keypair(): Promise<KeyPair> {
     return this.tonClient.request("crypto.nacl_box_keypair");
   }
 
   /**
-   * Generates key pair from a secret key
-   *
-   * @remarks
    * Generates key pair from a secret key
    *
    * @param {ParamsOfNaclBoxKeyPairFromSecret} param - parameters
@@ -301,8 +283,6 @@ export class CryptoModule {
    * Public key authenticated encryption
    *
    * @remarks
-   * Public key authenticated encryption
-   *
    * Encrypt and authenticate a message using the senders secret key, the recievers public
    * key, and a nonce.
    *
@@ -314,11 +294,7 @@ export class CryptoModule {
   }
 
   /**
-   * Decrypt and verify the cipher text using the recievers secret key, the senders public
-   *
-   * @remarks
-   * Decrypt and verify the cipher text using the recievers secret key, the senders public
-   * key, and the nonce.
+   * Decrypt and verify the cipher text using the recievers secret key, the senders public key, and the nonce.
    *
    * @param {ParamsOfNaclBoxOpen} param - parameters
    * @returns ResultOfNaclBoxOpen
@@ -330,9 +306,6 @@ export class CryptoModule {
   /**
    * Encrypt and authenticate message using nonce and secret key.
    *
-   * @remarks
-   * Encrypt and authenticate message using nonce and secret key.
-   *
    * @param {ParamsOfNaclSecretBox} param - parameters
    * @returns ResultOfNaclBox
    */
@@ -341,9 +314,6 @@ export class CryptoModule {
   }
 
   /**
-   * Decrypts and verifies cipher text using `nonce` and secret `key`.
-   *
-   * @remarks
    * Decrypts and verifies cipher text using `nonce` and secret `key`.
    *
    * @param {ParamsOfNaclSecretBoxOpen} param - parameters
@@ -358,9 +328,6 @@ export class CryptoModule {
   /**
    * Prints the list of words from the specified dictionary
    *
-   * @remarks
-   * Prints the list of words from the specified dictionary
-   *
    * @param {ParamsOfMnemonicWords} param - parameters
    * @returns ResultOfMnemonicWords
    */
@@ -371,9 +338,6 @@ export class CryptoModule {
   }
 
   /**
-   * Generates a random mnemonic
-   *
-   * @remarks
    * Generates a random mnemonic from the specified dictionary and word count
    *
    * @param {ParamsOfMnemonicFromRandom} param - parameters
@@ -386,9 +350,6 @@ export class CryptoModule {
   }
 
   /**
-   * Generates mnemonic from the specified entropy
-   *
-   * @remarks
    * Generates mnemonic from pre-generated entropy
    *
    * @param {ParamsOfMnemonicFromEntropy} param - parameters
@@ -401,11 +362,7 @@ export class CryptoModule {
   }
 
   /**
-   * Validates a mnemonic phrase
-   *
-   * @remarks
-   * The phrase supplied will be checked for word length and validated according to the checksum
-   * specified in BIP0039.
+   * The phrase supplied will be checked for word length and validated according to the checksum specified in BIP0039.
    *
    * @param {ParamsOfMnemonicVerify} param - parameters
    * @returns ResultOfMnemonicVerify
@@ -417,11 +374,7 @@ export class CryptoModule {
   }
 
   /**
-   * Derives a key pair for signing from the seed phrase
-   *
-   * @remarks
-   * Validates the seed phrase, generates master key and then derives
-   * the key pair from the master key and the specified path
+   * Validates the seed phrase, generates master key and then derives the key pair from the master key and the specified path
    *
    * @param {ParamsOfMnemonicDeriveSignKeys} param - parameters
    * @returns KeyPair
@@ -433,9 +386,6 @@ export class CryptoModule {
   }
 
   /**
-   * Generates an extended master private key that will be the root for all the derived keys
-   *
-   * @remarks
    * Generates an extended master private key that will be the root for all the derived keys
    *
    * @param {ParamsOfHDKeyXPrvFromMnemonic} param - parameters
@@ -450,9 +400,6 @@ export class CryptoModule {
   /**
    * Returns extended private key derived from the specified extended private key and child index
    *
-   * @remarks
-   * Returns extended private key derived from the specified extended private key and child index
-   *
    * @param {ParamsOfHDKeyDeriveFromXPrv} param - parameters
    * @returns ResultOfHDKeyDeriveFromXPrv
    */
@@ -463,10 +410,7 @@ export class CryptoModule {
   }
 
   /**
-   * Derives the exented private key from the specified key and path
-   *
-   * @remarks
-   * Derives the exented private key from the specified key and path
+   * Derives the extended private key from the specified key and path
    *
    * @param {ParamsOfHDKeyDeriveFromXPrvPath} param - parameters
    * @returns ResultOfHDKeyDeriveFromXPrvPath
@@ -478,9 +422,6 @@ export class CryptoModule {
   }
 
   /**
-   * Extracts the private key from the serialized extended private key
-   *
-   * @remarks
    * Extracts the private key from the serialized extended private key
    *
    * @param {ParamsOfHDKeySecretFromXPrv} param - parameters
@@ -495,9 +436,6 @@ export class CryptoModule {
   /**
    * Extracts the public key from the serialized extended private key
    *
-   * @remarks
-   * Extracts the public key from the serialized extended private key
-   *
    * @param {ParamsOfHDKeyPublicFromXPrv} param - parameters
    * @returns ResultOfHDKeyPublicFromXPrv
    */
@@ -510,13 +448,63 @@ export class CryptoModule {
   /**
    * Performs symmetric `chacha20` encryption.
    *
-   * @remarks
-   * Performs symmetric `chacha20` encryption.
-   *
    * @param {ParamsOfChaCha20} param - parameters
    * @returns ResultOfChaCha20
    */
   chacha20(params: ParamsOfChaCha20): Promise<ResultOfChaCha20> {
     return this.tonClient.request("crypto.chacha20", params);
+  }
+
+  /**
+   * Register an application implemented signing box.
+   *
+   *
+   * @returns RegisteredSigningBox
+   */
+  register_signing_box(): Promise<RegisteredSigningBox> {
+    return this.tonClient.request("crypto.register_signing_box");
+  }
+
+  /**
+   * Creates a default signing box implementation.
+   *
+   * @param {KeyPair} param - parameters
+   * @returns RegisteredSigningBox
+   */
+  get_signing_box(params: KeyPair): Promise<RegisteredSigningBox> {
+    return this.tonClient.request("crypto.get_signing_box", params);
+  }
+
+  /**
+   * Returns public key of signing key pair.
+   *
+   * @param {RegisteredSigningBox} param - parameters
+   * @returns ResultOfSigningBoxGetPublicKey
+   */
+  signing_box_get_public_key(
+    params: RegisteredSigningBox
+  ): Promise<ResultOfSigningBoxGetPublicKey> {
+    return this.tonClient.request("crypto.signing_box_get_public_key", params);
+  }
+
+  /**
+   * Returns signed user data.
+   *
+   * @param {ParamsOfSigningBoxSign} param - parameters
+   * @returns ResultOfSigningBoxSign
+   */
+  signing_box_sign(
+    params: ParamsOfSigningBoxSign
+  ): Promise<ResultOfSigningBoxSign> {
+    return this.tonClient.request("crypto.signing_box_sign", params);
+  }
+
+  /**
+   * Removes signing box from SDK.
+   *
+   * @param {RegisteredSigningBox} param - parameters
+   */
+  remove_signing_box(params: RegisteredSigningBox): Promise<undefined> {
+    return this.tonClient.request("crypto.remove_signing_box", params);
   }
 }
