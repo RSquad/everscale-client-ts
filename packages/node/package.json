@@ -18,5 +18,5 @@
   "dependencies": {
     "@ton-client-ts/core": "^1.1.0"
   },
-  "gitHead": "de7df05a1e425cca60ddf9c52d574c5f174d1977"
+  "gitHead": "1ceb118ac7efe8c320682de0eec8ba24bebeaa79"
 }
