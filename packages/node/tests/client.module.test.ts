@@ -5,7 +5,8 @@ test("version return correct version of TON-SDK", async () => {
     network: { server_address: "net.ton.dev" },
   });
   const { version } = await tonClient.client.version();
-  expect(version).toBe("1.11.1");
+  console.log(`VERSION: ${version}`);
+  expect(version).toBe("1.14.1");
 });
 
 test("get_api_reference return non empty modules", async () => {
