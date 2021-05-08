@@ -17,7 +17,8 @@ export type CryptoErrorCode =
   | "Bip39InvalidWordCount"
   | "MnemonicGenerationFailed"
   | "MnemonicFromEntropyFailed"
-  | "SigningBoxNotRegistered";
+  | "SigningBoxNotRegistered"
+  | "InvalidSignature";
 
 export type SigningBoxHandle = number;
 
@@ -243,6 +244,28 @@ export type ResultOfNaclSignDetached = {
    * signature - Signature encoded in `hex`.
    */
   signature: string;
+};
+
+export type ParamsOfNaclSignDetachedVerify = {
+  /**
+   * unsigned - Unsigned data that must be verified.
+   */
+  unsigned: string;
+  /**
+   * signature - Signature that must be verified.
+   */
+  signature: string;
+  /**
+   * public - Signer's public key - unprefixed 0-padded to 64 symbols hex string.
+   */
+  public: string;
+};
+
+export type ResultOfNaclSignDetachedVerify = {
+  /**
+   * succeeded - `true` if verification succeeded or `false` if it failed
+   */
+  succeeded: boolean;
 };
 
 export type ParamsOfNaclBoxKeyPairFromSecret = {

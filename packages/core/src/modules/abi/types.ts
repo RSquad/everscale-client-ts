@@ -1,4 +1,5 @@
 import { KeyPair, SigningBoxHandle } from "../crypto/types";
+import { BocCacheType } from "../boc/types";
 
 export type AbiErrorCode =
   | "RequiredAddressMissingForEncodeMessage"
@@ -11,7 +12,8 @@ export type AbiErrorCode =
   | "InvalidTvcImage"
   | "RequiredPublicKeyMissingForFunctionHeader"
   | "InvalidSigner"
-  | "InvalidAbi";
+  | "InvalidAbi"
+  | "InvalidFunctionId";
 
 export type Abi =
   | {
@@ -59,7 +61,7 @@ export type FunctionHeader = {
 
 export type CallSet = {
   /**
-   * function_name - Function name that is being called.
+   * function_name - Function name that is being called. Or function id encoded as string in hex (starting with 0x).
    */
   function_name: string;
   /**
@@ -85,6 +87,10 @@ export type DeploySet = {
    * initial_data - List of initial values for contract's public variables.
    */
   initial_data?: any;
+  /**
+   * initial_pubkey - Optional public key that can be provided in deploy set in order to substitute one in TVM file or provided by Signer.
+   */
+  initial_pubkey?: string;
 };
 
 /**
@@ -284,6 +290,56 @@ export type ResultOfEncodeMessage = {
   message_id: string;
 };
 
+export type ParamsOfEncodeInternalMessage = {
+  /**
+   * abi - Contract ABI.
+   */
+  abi?: Abi;
+  /**
+   * address - Target address the message will be sent to.
+   */
+  address?: string;
+  /**
+   * src_address - Source address of the message.
+   */
+  src_address?: string;
+  /**
+   * deploy_set - Deploy parameters.
+   */
+  deploy_set?: DeploySet;
+  /**
+   * call_set - Function call parameters.
+   */
+  call_set?: CallSet;
+  /**
+   * value - Value in nanotokens to be sent with message.
+   */
+  value: string;
+  /**
+   * bounce - Flag of bounceable message.
+   */
+  bounce?: boolean;
+  /**
+   * enable_ihr - Enable Instant Hypercube Routing for the message.
+   */
+  enable_ihr?: boolean;
+};
+
+export type ResultOfEncodeInternalMessage = {
+  /**
+   * message - Message BOC encoded with `base64`.
+   */
+  message: string;
+  /**
+   * address - Destination address.
+   */
+  address: string;
+  /**
+   * message_id - Message id.
+   */
+  message_id: string;
+};
+
 export type ParamsOfAttachSignature = {
   abi: Abi;
   /**
@@ -361,6 +417,10 @@ export type ParamsOfEncodeAccount = {
    * last_paid - Initial value for the `last_paid`.
    */
   last_paid?: number;
+  /**
+   * boc_cache - Cache type to put the result.
+   */
+  boc_cache?: BocCacheType;
 };
 
 export type ResultOfEncodeAccount = {

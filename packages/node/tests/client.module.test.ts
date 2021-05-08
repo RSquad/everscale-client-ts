@@ -6,6 +6,9 @@ test("version return correct version of TON-SDK", async () => {
   });
   const { version } = await tonClient.client.version();
   console.log(`VERSION: ${version}`);
+  // console.log(
+  //   `VERSION: ${JSON.stringify(await tonClient.client.get_api_reference())}`
+  // );
   expect(version).toBe("1.14.1");
 });
 

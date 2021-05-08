@@ -25,6 +25,8 @@ import {
   ParamsOfNaclSignOpen,
   ResultOfNaclSignOpen,
   ResultOfNaclSignDetached,
+  ParamsOfNaclSignDetachedVerify,
+  ResultOfNaclSignDetachedVerify,
   ParamsOfNaclBoxKeyPairFromSecret,
   ParamsOfNaclBox,
   ResultOfNaclBox,
@@ -258,6 +260,18 @@ export class CryptoModule {
   }
 
   /**
+   * Verifies the signature with public key and `unsigned` data.
+   *
+   * @param {ParamsOfNaclSignDetachedVerify} param - parameters
+   * @returns ResultOfNaclSignDetachedVerify
+   */
+  nacl_sign_detached_verify(
+    params: ParamsOfNaclSignDetachedVerify
+  ): Promise<ResultOfNaclSignDetachedVerify> {
+    return this.tonClient.request("crypto.nacl_sign_detached_verify", params);
+  }
+
+  /**
    * Generates a random NaCl key pair
    */
   nacl_box_keypair(): Promise<KeyPair> {
@@ -283,7 +297,7 @@ export class CryptoModule {
    * Public key authenticated encryption
    *
    * @remarks
-   * Encrypt and authenticate a message using the senders secret key, the recievers public
+   * Encrypt and authenticate a message using the senders secret key, the receivers public
    * key, and a nonce.
    *
    * @param {ParamsOfNaclBox} param - parameters
@@ -294,7 +308,7 @@ export class CryptoModule {
   }
 
   /**
-   * Decrypt and verify the cipher text using the recievers secret key, the senders public key, and the nonce.
+   * Decrypt and verify the cipher text using the receivers secret key, the senders public key, and the nonce.
    *
    * @param {ParamsOfNaclBoxOpen} param - parameters
    * @returns ResultOfNaclBoxOpen

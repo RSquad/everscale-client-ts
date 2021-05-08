@@ -6,6 +6,8 @@ import {
   ResultOfAttachSignatureToMessageBody,
   ParamsOfEncodeMessage,
   ResultOfEncodeMessage,
+  ParamsOfEncodeInternalMessage,
+  ResultOfEncodeInternalMessage,
   ParamsOfAttachSignature,
   ResultOfAttachSignature,
   ParamsOfDecodeMessage,
@@ -68,9 +70,17 @@ export class AbiModule {
    *
    * `Signer::Keys` creates a signed message with provided key pair.
    *
-   * [SOON] `Signer::SigningBox` Allows using a special interface to imlepement signing
+   * [SOON] `Signer::SigningBox` Allows using a special interface to implement signing
    * without private key disclosure to SDK. For instance, in case of using a cold wallet or HSM,
    * when application calls some API to sign data.
+   *
+   * There is an optional public key can be provided in deploy set in order to substitute one
+   * in TVM file.
+   *
+   * Public key resolving priority:
+   * 1. Public key from deploy set.
+   * 2. Public key, specified in TVM file.
+   * 3. Public key, provided by signer.
    *
    * @param {ParamsOfEncodeMessage} param - parameters
    * @returns ResultOfEncodeMessage
@@ -79,6 +89,34 @@ export class AbiModule {
     params: ParamsOfEncodeMessage
   ): Promise<ResultOfEncodeMessage> {
     return this.tonClient.request("abi.encode_message", params);
+  }
+
+  /**
+   * Encodes an internal ABI-compatible message
+   *
+   * @remarks
+   * Allows to encode deploy and function call messages.
+   *
+   * Use cases include messages of any possible type:
+   * - deploy with initial function call (i.e. `constructor` or any other function that is used for some kind
+   * of initialization);
+   * - deploy without initial function call;
+   * - simple function call
+   *
+   * There is an optional public key can be provided in deploy set in order to substitute one
+   * in TVM file.
+   *
+   * Public key resolving priority:
+   * 1. Public key from deploy set.
+   * 2. Public key, specified in TVM file.
+   *
+   * @param {ParamsOfEncodeInternalMessage} param - parameters
+   * @returns ResultOfEncodeInternalMessage
+   */
+  encode_internal_message(
+    params: ParamsOfEncodeInternalMessage
+  ): Promise<ResultOfEncodeInternalMessage> {
+    return this.tonClient.request("abi.encode_internal_message", params);
   }
 
   /**

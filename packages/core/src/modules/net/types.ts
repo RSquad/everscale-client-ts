@@ -10,7 +10,9 @@ export type NetErrorCode =
   | "NetworkModuleSuspended"
   | "WebsocketDisconnected"
   | "NotSupported"
-  | "NoEndpointsProvided";
+  | "NoEndpointsProvided"
+  | "GraphqlWebsocketInitError"
+  | "NetworkModuleResumed";
 
 export type OrderBy = {
   path: string;
@@ -18,6 +20,34 @@ export type OrderBy = {
 };
 
 export type SortDirection = "ASC" | "DESC";
+
+export type ParamsOfQueryOperation =
+  | {
+      type: "QueryCollection";
+      value: ParamsOfQueryCollection;
+    }
+  | {
+      type: "WaitForCollection";
+      value: ParamsOfWaitForCollection;
+    }
+  | {
+      type: "AggregateCollection";
+      value: ParamsOfAggregateCollection;
+    }
+  | {
+      type: "QueryCounterparties";
+      value: ParamsOfQueryCounterparties;
+    };
+
+export type FieldAggregation = {
+  /**
+   * field - Dot separated path to the field
+   */
+  field: string;
+  fn: AggregationFn;
+};
+
+export type AggregationFn = "COUNT" | "MIN" | "MAX" | "SUM" | "AVERAGE";
 
 export type ParamsOfQuery = {
   /**
@@ -32,6 +62,20 @@ export type ParamsOfQuery = {
 
 export type ResultOfQuery = {
   result: any;
+};
+
+export type ParamsOfBatchQuery = {
+  /**
+   * operations - List of query operations that must be performed per single fetch.
+   */
+  operations: ParamsOfQueryOperation[];
+};
+
+export type ResultOfBatchQuery = {
+  /**
+   * results - Result values for batched queries.
+   */
+  results: any[];
 };
 
 export type ParamsOfQueryCollection = {
@@ -62,6 +106,25 @@ export type ResultOfQueryCollection = {
    * result - Objects that match the provided criteria
    */
   result: any[];
+};
+
+export type ParamsOfAggregateCollection = {
+  /**
+   * collection - Collection name (accounts, blocks, transactions, messages, block_signatures)
+   */
+  collection: string;
+  /**
+   * filter - Collection filter
+   */
+  filter?: any;
+  /**
+   * fields - Projection (result) string
+   */
+  fields?: FieldAggregation[];
+};
+
+export type ResultOfAggregateCollection = {
+  values: any;
 };
 
 export type ParamsOfWaitForCollection = {
@@ -128,4 +191,23 @@ export type EndpointsSet = {
    * endpoints - List of endpoints provided by server
    */
   endpoints: string[];
+};
+
+export type ParamsOfQueryCounterparties = {
+  /**
+   * account - Account address
+   */
+  account: string;
+  /**
+   * result - Projection (result) string
+   */
+  result: string;
+  /**
+   * first - Number of counterparties to return
+   */
+  first?: number;
+  /**
+   * after - `cursor` field of the last received result
+   */
+  after?: string;
 };

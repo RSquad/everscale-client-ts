@@ -127,6 +127,10 @@ export type ResultOfSendMessage = {
    * shard_block_id - The last generated shard block of the message destination account before the message was sent.
    */
   shard_block_id: string;
+  /**
+   * sending_endpoints - The list of endpoints to which the message was sent.
+   */
+  sending_endpoints: string[];
 };
 
 export type ParamsOfWaitForTransaction = {
@@ -146,6 +150,10 @@ export type ParamsOfWaitForTransaction = {
    * send_events - Flag that enables/disables intermediate events
    */
   send_events: boolean;
+  /**
+   * sending_endpoints - The list of endpoints to which the message was sent.
+   */
+  sending_endpoints?: string[];
 };
 
 export type ParamsOfProcessMessage = {

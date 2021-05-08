@@ -9,6 +9,13 @@ import {
   ResultOfGetBocHash,
   ParamsOfGetCodeFromTvc,
   ResultOfGetCodeFromTvc,
+  ParamsOfBocCacheGet,
+  ResultOfBocCacheGet,
+  ParamsOfBocCacheSet,
+  ResultOfBocCacheSet,
+  ParamsOfBocCacheUnpin,
+  ParamsOfEncodeBoc,
+  ResultOfEncodeBoc,
 } from "./types";
 
 /**
@@ -85,6 +92,12 @@ export class BocModule {
     return this.tonClient.request("boc.parse_shardstate", params);
   }
 
+  /**
+   * Extract blockchain configuration from key block and also from zerostate.
+   *
+   * @param {ParamsOfGetBlockchainConfig} param - parameters
+   * @returns ResultOfGetBlockchainConfig
+   */
   get_blockchain_config(
     params: ParamsOfGetBlockchainConfig
   ): Promise<ResultOfGetBlockchainConfig> {
@@ -111,5 +124,47 @@ export class BocModule {
     params: ParamsOfGetCodeFromTvc
   ): Promise<ResultOfGetCodeFromTvc> {
     return this.tonClient.request("boc.get_code_from_tvc", params);
+  }
+
+  /**
+   * Get BOC from cache
+   *
+   * @param {ParamsOfBocCacheGet} param - parameters
+   * @returns ResultOfBocCacheGet
+   */
+  cache_get(params: ParamsOfBocCacheGet): Promise<ResultOfBocCacheGet> {
+    return this.tonClient.request("boc.cache_get", params);
+  }
+
+  /**
+   * Save BOC into cache
+   *
+   * @param {ParamsOfBocCacheSet} param - parameters
+   * @returns ResultOfBocCacheSet
+   */
+  cache_set(params: ParamsOfBocCacheSet): Promise<ResultOfBocCacheSet> {
+    return this.tonClient.request("boc.cache_set", params);
+  }
+
+  /**
+   * Unpin BOCs with specified pin.
+   *
+   * @remarks
+   * BOCs which don't have another pins will be removed from cache
+   *
+   * @param {ParamsOfBocCacheUnpin} param - parameters
+   */
+  cache_unpin(params: ParamsOfBocCacheUnpin): Promise<undefined> {
+    return this.tonClient.request("boc.cache_unpin", params);
+  }
+
+  /**
+   * Encodes BOC from builder operations.
+   *
+   * @param {ParamsOfEncodeBoc} param - parameters
+   * @returns ResultOfEncodeBoc
+   */
+  encode_boc(params: ParamsOfEncodeBoc): Promise<ResultOfEncodeBoc> {
+    return this.tonClient.request("boc.encode_boc", params);
   }
 }

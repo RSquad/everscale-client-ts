@@ -43,6 +43,7 @@ export type ClientConfig = {
   network?: NetworkConfig;
   crypto?: CryptoConfig;
   abi?: AbiConfig;
+  boc?: BocConfig;
 };
 
 export type NetworkConfig = {
@@ -55,15 +56,23 @@ export type NetworkConfig = {
    */
   endpoints?: string[];
   /**
-   * network_retries_count - The number of automatic network retries that SDK performs in case of connection problems The default value is 5.
+   * network_retries_count - Deprecated.
    */
   network_retries_count?: number;
   /**
-   * message_retries_count - The number of automatic message processing retries that SDK performs in case of `Message Expired (507)` error - but only for those messages which local emulation was successfull or failed with replay protection error. The default value is 5.
+   * max_reconnect_timeout - Maximum time for sequential reconnections in ms.
+   */
+  max_reconnect_timeout?: number;
+  /**
+   * reconnect_timeout - Deprecated
+   */
+  reconnect_timeout?: number;
+  /**
+   * message_retries_count - The number of automatic message processing retries that SDK performs in case of `Message Expired (507)` error - but only for those messages which local emulation was successful or failed with replay protection error. The default value is 5.
    */
   message_retries_count?: number;
   /**
-   * message_processing_timeout - Timeout that is used to process message delivery for the contracts which ABI does not include "expire" header. If the message is not delivered within the speficied timeout the appropriate error occurs.
+   * message_processing_timeout - Timeout that is used to process message delivery for the contracts which ABI does not include "expire" header. If the message is not delivered within the specified timeout the appropriate error occurs.
    */
   message_processing_timeout?: number;
   /**
@@ -75,9 +84,9 @@ export type NetworkConfig = {
    */
   out_of_sync_threshold?: number;
   /**
-   * reconnect_timeout - Timeout between reconnect attempts
+   * sending_endpoint_count - Maximum number of randomly chosen endpoints the library uses to send message. The default value is 2 endpoints.
    */
-  reconnect_timeout?: number;
+  sending_endpoint_count?: number;
   /**
    * access_key - Access key to GraphQL API.
    */
@@ -86,7 +95,7 @@ export type NetworkConfig = {
 
 export type CryptoConfig = {
   /**
-   * mnemonic_dictionary - Mnemonic dictionary that will be used by default in crypto funcions. If not specified, 1 dictionary will be used.
+   * mnemonic_dictionary - Mnemonic dictionary that will be used by default in crypto functions. If not specified, 1 dictionary will be used.
    */
   mnemonic_dictionary?: number;
   /**
@@ -114,6 +123,13 @@ export type AbiConfig = {
   message_expiration_timeout_grow_factor?: number;
 };
 
+export type BocConfig = {
+  /**
+   * cache_max_size - Maximum BOC cache size in kilobytes.
+   */
+  cache_max_size?: number;
+};
+
 export type BuildInfoDependency = {
   /**
    * name - Dependency name.
@@ -134,7 +150,7 @@ export type ParamsOfAppRequest = {
 };
 
 /**
- * * Error - Error occured during request processing
+ * * Error - Error occurred during request processing
  * 
  * * Ok - Request processed successfully
  * 

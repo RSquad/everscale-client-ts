@@ -26,3 +26,44 @@ export type ResultOfConvertAddress = {
    */
   address: string;
 };
+
+export type ParamsOfCalcStorageFee = {
+  account: string;
+  period: number;
+};
+
+export type ResultOfCalcStorageFee = {
+  fee: string;
+};
+
+export type ParamsOfCompressZstd = {
+  /**
+   * uncompressed - Uncompressed data.
+   */
+  uncompressed: string;
+  /**
+   * level - Compression level, from 1 to 21. Where: 1 - lowest compression level (fastest compression); 21 - highest compression level (slowest compression). If level is omitted, the default compression level is used (currently `3`).
+   */
+  level?: number;
+};
+
+export type ResultOfCompressZstd = {
+  /**
+   * compressed - Compressed data.
+   */
+  compressed: string;
+};
+
+export type ParamsOfDecompressZstd = {
+  /**
+   * compressed - Compressed data.
+   */
+  compressed: string;
+};
+
+export type ResultOfDecompressZstd = {
+  /**
+   * decompressed - Decompressed data.
+   */
+  decompressed: string;
+};

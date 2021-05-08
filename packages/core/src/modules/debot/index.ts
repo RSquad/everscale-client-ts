@@ -1,11 +1,15 @@
 import { TonClient } from "../..";
 import {
-  ParamsOfStart,
+  ParamsOfInit,
   ParamsOfAppDebotBrowser,
   ResultOfAppDebotBrowser,
   RegisteredDebot,
+  ParamsOfStart,
   ParamsOfFetch,
+  ResultOfFetch,
   ParamsOfExecute,
+  ParamsOfSend,
+  ParamsOfRemove,
 } from "./types";
 
 /**
@@ -18,28 +22,7 @@ export class DebotModule {
   }
 
   /**
-   * [UNSTABLE](UNSTABLE.md) Starts an instance of debot.
-   *
-   * @remarks
-   * Downloads debot smart contract from blockchain and switches it to
-   * context zero.
-   * Returns a debot handle which can be used later in `execute` function.
-   * This function must be used by Debot Browser to start a dialog with debot.
-   * While the function is executing, several Browser Callbacks can be called,
-   * since the debot tries to display all actions from the context 0 to the user.
-   *
-   * # Remarks
-   * `start` is equivalent to `fetch` + switch to context 0.
-   *
-   * @param {ParamsOfStart} param - [UNSTABLE](UNSTABLE.md) Parameters to start debot.
-   * @returns [UNSTABLE](UNSTABLE.md) Structure for storing debot handle returned from `start` and `fetch` functions.
-   */
-  start(params: ParamsOfStart): Promise<RegisteredDebot> {
-    return this.tonClient.request("debot.start", params);
-  }
-
-  /**
-   * [UNSTABLE](UNSTABLE.md) Fetches debot from blockchain.
+   * [UNSTABLE](UNSTABLE.md) Creates and instance of DeBot.
    *
    * @remarks
    * Downloads debot smart contract (code and data) from blockchain and creates
@@ -48,10 +31,44 @@ export class DebotModule {
    * # Remarks
    * It does not switch debot to context 0. Browser Callbacks are not called.
    *
-   * @param {ParamsOfFetch} param - [UNSTABLE](UNSTABLE.md) Parameters to fetch debot.
-   * @returns [UNSTABLE](UNSTABLE.md) Structure for storing debot handle returned from `start` and `fetch` functions.
+   * @param {ParamsOfInit} param - [UNSTABLE](UNSTABLE.md) Parameters to init DeBot.
+   * @returns [UNSTABLE](UNSTABLE.md) Structure for storing debot handle returned from `init` function.
    */
-  fetch(params: ParamsOfFetch): Promise<RegisteredDebot> {
+  init(params: ParamsOfInit): Promise<RegisteredDebot> {
+    return this.tonClient.request("debot.init", params);
+  }
+
+  /**
+   * [UNSTABLE](UNSTABLE.md) Starts the DeBot.
+   *
+   * @remarks
+   * Downloads debot smart contract from blockchain and switches it to
+   * context zero.
+   *
+   * This function must be used by Debot Browser to start a dialog with debot.
+   * While the function is executing, several Browser Callbacks can be called,
+   * since the debot tries to display all actions from the context 0 to the user.
+   *
+   * When the debot starts SDK registers `BrowserCallbacks` AppObject.
+   * Therefore when `debote.remove` is called the debot is being deleted and the callback is called
+   * with `finish`=`true` which indicates that it will never be used again.
+   *
+   * @param {ParamsOfStart} param - [UNSTABLE](UNSTABLE.md) Parameters to start DeBot. DeBot must be already initialized with init() function.
+   */
+  start(params: ParamsOfStart): Promise<undefined> {
+    return this.tonClient.request("debot.start", params);
+  }
+
+  /**
+   * [UNSTABLE](UNSTABLE.md) Fetches DeBot metadata from blockchain.
+   *
+   * @remarks
+   * Downloads DeBot from blockchain and creates and fetches its metadata.
+   *
+   * @param {ParamsOfFetch} param - [UNSTABLE](UNSTABLE.md) Parameters to fetch DeBot metadata.
+   * @returns [UNSTABLE](UNSTABLE.md)
+   */
+  fetch(params: ParamsOfFetch): Promise<ResultOfFetch> {
     return this.tonClient.request("debot.fetch", params);
   }
 
@@ -72,14 +89,26 @@ export class DebotModule {
   }
 
   /**
+   * [UNSTABLE](UNSTABLE.md) Sends message to Debot.
+   *
+   * @remarks
+   * Used by Debot Browser to send response on Dinterface call or from other Debots.
+   *
+   * @param {ParamsOfSend} param - [UNSTABLE](UNSTABLE.md) Parameters of `send` function.
+   */
+  send(params: ParamsOfSend): Promise<undefined> {
+    return this.tonClient.request("debot.send", params);
+  }
+
+  /**
    * [UNSTABLE](UNSTABLE.md) Destroys debot handle.
    *
    * @remarks
    * Removes handle from Client Context and drops debot engine referenced by that handle.
    *
-   * @param {RegisteredDebot} param - [UNSTABLE](UNSTABLE.md) Structure for storing debot handle returned from `start` and `fetch` functions.
+   * @param {ParamsOfRemove} param - [UNSTABLE](UNSTABLE.md)
    */
-  remove(params: RegisteredDebot): Promise<undefined> {
+  remove(params: ParamsOfRemove): Promise<undefined> {
     return this.tonClient.request("debot.remove", params);
   }
 }

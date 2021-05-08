@@ -1,4 +1,5 @@
 import { Abi } from "../abi/types";
+import { BocCacheType } from "../boc/types";
 import { DecodedOutput } from "../processing/types";
 
 export type TvmErrorCode =
@@ -85,6 +86,14 @@ export type ParamsOfRunExecutor = {
    * skip_transaction_check - Skip transaction check flag
    */
   skip_transaction_check?: boolean;
+  /**
+   * boc_cache - Cache type to put the result.
+   */
+  boc_cache?: BocCacheType;
+  /**
+   * return_updated_account - Return updated account flag.
+   */
+  return_updated_account?: boolean;
 };
 
 export type ResultOfRunExecutor = {
@@ -118,9 +127,17 @@ export type ParamsOfRunTvm = {
    */
   execution_options?: ExecutionOptions;
   /**
-   * abi - Contract ABI for dedcoding output messages
+   * abi - Contract ABI for decoding output messages
    */
   abi?: Abi;
+  /**
+   * boc_cache - Cache type to put the result.
+   */
+  boc_cache?: BocCacheType;
+  /**
+   * return_updated_account - Return updated account flag.
+   */
+  return_updated_account?: boolean;
 };
 
 export type ResultOfRunTvm = {
@@ -151,7 +168,14 @@ export type ParamsOfRunGet = {
    * input - Input parameters
    */
   input?: any;
+  /**
+   * execution_options - Execution options
+   */
   execution_options?: ExecutionOptions;
+  /**
+   * tuple_list_as_array - Convert lists based on nested tuples in the **result** into plain arrays.
+   */
+  tuple_list_as_array?: boolean;
 };
 
 export type ResultOfRunGet = {
