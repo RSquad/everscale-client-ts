@@ -13,7 +13,8 @@ export type AbiErrorCode =
   | "RequiredPublicKeyMissingForFunctionHeader"
   | "InvalidSigner"
   | "InvalidAbi"
-  | "InvalidFunctionId";
+  | "InvalidFunctionId"
+  | "InvalidData";
 
 export type Abi =
   | {
@@ -199,10 +200,12 @@ export type AbiFunction = {
 export type AbiContract = {
   "ABI version"?: number;
   abi_version?: number;
+  version?: string;
   header?: string[];
   functions?: AbiFunction[];
   events?: AbiEvent[];
   data?: AbiData[];
+  fields?: AbiParam[];
 };
 
 export type ParamsOfEncodeMessageBody = {
@@ -432,4 +435,16 @@ export type ResultOfEncodeAccount = {
    * id - Account ID  encoded in `hex`.
    */
   id: string;
+};
+
+export type ParamsOfDecodeAccountData = {
+  abi: Abi;
+  /**
+   * data - Data BOC or BOC handle
+   */
+  data: string;
+};
+
+export type ResultOfDecodeData = {
+  data: any;
 };

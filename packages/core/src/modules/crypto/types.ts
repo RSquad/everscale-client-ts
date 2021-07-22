@@ -18,9 +18,31 @@ export type CryptoErrorCode =
   | "MnemonicGenerationFailed"
   | "MnemonicFromEntropyFailed"
   | "SigningBoxNotRegistered"
-  | "InvalidSignature";
+  | "InvalidSignature"
+  | "EncryptionBoxNotRegistered";
 
 export type SigningBoxHandle = number;
+
+export type EncryptionBoxHandle = number;
+
+export type EncryptionBoxInfo = {
+  /**
+   * hdpath - Derivation path, for instance "m/44'/396'/0'/0/0"
+   */
+  hdpath?: string;
+  /**
+   * algorithm - Cryptographic algorithm, used by this encryption box
+   */
+  algorithm?: string;
+  /**
+   * options - Options, depends on algorithm and specific encryption box implementation
+   */
+  options?: any;
+  /**
+   * public - Public information, depends on algorithm
+   */
+  public?: any;
+};
 
 export type ParamsOfFactorize = {
   /**
@@ -209,7 +231,7 @@ export type ParamsOfNaclSign = {
    */
   unsigned: string;
   /**
-   * secret - Signer's secret key - unprefixed 0-padded to 64 symbols hex string
+   * secret - Signer's secret key - unprefixed 0-padded to 128 symbols hex string (concatenation of 64 symbols secret and 64 symbols public keys). See `nacl_sign_keypair_from_secret_key`.
    */
   secret: string;
 };
@@ -618,4 +640,91 @@ export type ResultOfSigningBoxSign = {
    * signature - Data signature.
    */
   signature: string;
+};
+
+export type RegisteredEncryptionBox = {
+  handle: EncryptionBoxHandle;
+};
+
+/**
+ * * GetInfo - Get encryption box info
+ * 
+ * * Encrypt - Encrypt data
+ * 
+ * * Decrypt - Decrypt data
+ * 
+
+*/
+export type ParamsOfAppEncryptionBox =
+  | {
+      type: "GetInfo";
+    }
+  | {
+      type: "Encrypt";
+      data: string;
+    }
+  | {
+      type: "Decrypt";
+      data: string;
+    };
+
+/**
+ * * GetInfo - Result of getting encryption box info
+ * 
+ * * Encrypt - Result of encrypting data
+ * 
+ * * Decrypt - Result of decrypting data
+ * 
+
+*/
+export type ResultOfAppEncryptionBox =
+  | {
+      type: "GetInfo";
+      info: EncryptionBoxInfo;
+    }
+  | {
+      type: "Encrypt";
+      data: string;
+    }
+  | {
+      type: "Decrypt";
+      data: string;
+    };
+
+export type ParamsOfEncryptionBoxGetInfo = {
+  encryption_box: EncryptionBoxHandle;
+};
+
+export type ResultOfEncryptionBoxGetInfo = {
+  info: EncryptionBoxInfo;
+};
+
+export type ParamsOfEncryptionBoxEncrypt = {
+  encryption_box: EncryptionBoxHandle;
+  /**
+   * data - Data to be encrypted, encoded in Base64
+   */
+  data: string;
+};
+
+export type ResultOfEncryptionBoxEncrypt = {
+  /**
+   * data - Encrypted data, encoded in Base64
+   */
+  data: string;
+};
+
+export type ParamsOfEncryptionBoxDecrypt = {
+  encryption_box: EncryptionBoxHandle;
+  /**
+   * data - Data to be decrypted, encoded in Base64
+   */
+  data: string;
+};
+
+export type ResultOfEncryptionBoxDecrypt = {
+  /**
+   * data - Decrypted data, encoded in Base64
+   */
+  data: string;
 };

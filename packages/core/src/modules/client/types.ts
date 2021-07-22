@@ -31,7 +31,8 @@ export type ClientErrorCode =
   | "CanNotParseRequestResult"
   | "UnexpectedCallbackResponse"
   | "CanNotParseNumber"
-  | "InternalError";
+  | "InternalError"
+  | "InvalidHandle";
 
 export type ClientError = {
   code: number;
@@ -60,7 +61,7 @@ export type NetworkConfig = {
    */
   network_retries_count?: number;
   /**
-   * max_reconnect_timeout - Maximum time for sequential reconnections in ms.
+   * max_reconnect_timeout - Maximum time for sequential reconnections.
    */
   max_reconnect_timeout?: number;
   /**
@@ -68,7 +69,7 @@ export type NetworkConfig = {
    */
   reconnect_timeout?: number;
   /**
-   * message_retries_count - The number of automatic message processing retries that SDK performs in case of `Message Expired (507)` error - but only for those messages which local emulation was successful or failed with replay protection error. The default value is 5.
+   * message_retries_count - The number of automatic message processing retries that SDK performs in case of `Message Expired (507)` error - but only for those messages which local emulation was successful or failed with replay protection error.
    */
   message_retries_count?: number;
   /**
@@ -76,7 +77,7 @@ export type NetworkConfig = {
    */
   message_processing_timeout?: number;
   /**
-   * wait_for_timeout - Maximum timeout that is used for query response. The default value is 40 sec.
+   * wait_for_timeout - Maximum timeout that is used for query response.
    */
   wait_for_timeout?: number;
   /**
@@ -84,9 +85,21 @@ export type NetworkConfig = {
    */
   out_of_sync_threshold?: number;
   /**
-   * sending_endpoint_count - Maximum number of randomly chosen endpoints the library uses to send message. The default value is 2 endpoints.
+   * sending_endpoint_count - Maximum number of randomly chosen endpoints the library uses to broadcast a message.
    */
   sending_endpoint_count?: number;
+  /**
+   * latency_detection_interval - Frequency of sync latency detection.
+   */
+  latency_detection_interval?: number;
+  /**
+   * max_latency - Maximum value for the endpoint's blockchain data syncronization latency (time-lag). Library periodically checks the current endpoint for blockchain data syncronization latency. If the latency (time-lag) is less then `NetworkConfig.max_latency` then library selects another endpoint.
+   */
+  max_latency?: number;
+  /**
+   * query_timeout - Default timeout for http requests.
+   */
+  query_timeout?: number;
   /**
    * access_key - Access key to GraphQL API.
    */

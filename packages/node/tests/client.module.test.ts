@@ -1,4 +1,5 @@
 import { TonClient } from "../src";
+const fs = require("fs");
 
 test("version return correct version of TON-SDK", async () => {
   const tonClient = new TonClient({
@@ -9,7 +10,7 @@ test("version return correct version of TON-SDK", async () => {
   // console.log(
   //   `VERSION: ${JSON.stringify(await tonClient.client.get_api_reference())}`
   // );
-  expect(version).toBe("1.14.1");
+  expect(version).toBe("1.20.0");
 });
 
 test("get_api_reference return non empty modules", async () => {
@@ -17,6 +18,11 @@ test("get_api_reference return non empty modules", async () => {
     network: { server_address: "net.ton.dev" },
   });
   const result = await tonClient.client.get_api_reference();
+  console.log(result);
+  fs.writeFileSync(
+    `../../api.json`,
+    JSON.stringify(result)
+  );
   expect(result.api.modules).toBeTruthy();
   expect(result.api.modules).not.toHaveLength(0);
 });

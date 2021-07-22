@@ -1,6 +1,6 @@
 {
   "name": "ton-client-ts",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Zero dependency cross-platform bindings for TON-SDK written in TypeScript",
   "repository": {
     "type": "git",

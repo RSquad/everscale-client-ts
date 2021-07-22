@@ -103,6 +103,7 @@ export type DebotActivity = {
   fee: number;
   setcode: boolean;
   signkey: string;
+  signing_box_handle: number;
 };
 
 export type Spending = {

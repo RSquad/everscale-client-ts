@@ -61,6 +61,15 @@ import {
   ResultOfSigningBoxGetPublicKey,
   ParamsOfSigningBoxSign,
   ResultOfSigningBoxSign,
+  ParamsOfAppEncryptionBox,
+  ResultOfAppEncryptionBox,
+  RegisteredEncryptionBox,
+  ParamsOfEncryptionBoxGetInfo,
+  ResultOfEncryptionBoxGetInfo,
+  ParamsOfEncryptionBoxEncrypt,
+  ResultOfEncryptionBoxEncrypt,
+  ParamsOfEncryptionBoxDecrypt,
+  ResultOfEncryptionBoxDecrypt,
 } from "./types";
 
 /**
@@ -73,7 +82,12 @@ export class CryptoModule {
   }
 
   /**
-   * Performs prime factorization – decomposition of a composite number into a product of smaller prime integers (factors). See [https://en.wikipedia.org/wiki/Integer_factorization]
+   * Integer factorization
+   *
+   * @remarks
+   * Performs prime factorization – decomposition of a composite number
+   * into a product of smaller prime integers (factors).
+   * See [https://en.wikipedia.org/wiki/Integer_factorization]
    *
    * @param {ParamsOfFactorize} param - parameters
    * @returns ResultOfFactorize
@@ -83,7 +97,11 @@ export class CryptoModule {
   }
 
   /**
-   * Performs modular exponentiation for big integers (`base`^`exponent` mod `modulus`). See [https://en.wikipedia.org/wiki/Modular_exponentiation]
+   * Modular exponentiation
+   *
+   * @remarks
+   * Performs modular exponentiation for big integers (`base`^`exponent` mod `modulus`).
+   * See [https://en.wikipedia.org/wiki/Modular_exponentiation]
    *
    * @param {ParamsOfModularPower} param - parameters
    * @returns ResultOfModularPower
@@ -179,9 +197,12 @@ export class CryptoModule {
   }
 
   /**
-   * Derives key from `password` and `key` using `scrypt` algorithm. See [https://en.wikipedia.org/wiki/Scrypt].
+   * Perform `scrypt` encryption
    *
    * @remarks
+   * Derives key from `password` and `key` using `scrypt` algorithm.
+   * See [https://en.wikipedia.org/wiki/Scrypt].
+   *
    * # Arguments
    * - `log_n` - The log2 of the Scrypt parameter `N`
    * - `r` - The Scrypt parameter `r`
@@ -204,6 +225,11 @@ export class CryptoModule {
 
   /**
    * Generates a key pair for signing from the secret key
+   *
+   * @remarks
+   * **NOTE:** In the result the secret key is actually the concatenation
+   * of secret and public keys (128 symbols hex string) by design of [NaCL](http://nacl.cr.yp.to/sign.html).
+   * See also [the stackexchange question](https://crypto.stackexchange.com/questions/54353/).
    *
    * @param {ParamsOfNaclSignKeyPairFromSecret} param - parameters
    * @returns KeyPair
@@ -352,6 +378,9 @@ export class CryptoModule {
   }
 
   /**
+   * Generates a random mnemonic
+   *
+   * @remarks
    * Generates a random mnemonic from the specified dictionary and word count
    *
    * @param {ParamsOfMnemonicFromRandom} param - parameters
@@ -376,7 +405,11 @@ export class CryptoModule {
   }
 
   /**
-   * The phrase supplied will be checked for word length and validated according to the checksum specified in BIP0039.
+   * Validates a mnemonic phrase
+   *
+   * @remarks
+   * The phrase supplied will be checked for word length and validated according to the checksum
+   * specified in BIP0039.
    *
    * @param {ParamsOfMnemonicVerify} param - parameters
    * @returns ResultOfMnemonicVerify
@@ -388,7 +421,11 @@ export class CryptoModule {
   }
 
   /**
-   * Validates the seed phrase, generates master key and then derives the key pair from the master key and the specified path
+   * Derives a key pair for signing from the seed phrase
+   *
+   * @remarks
+   * Validates the seed phrase, generates master key and then derives
+   * the key pair from the master key and the specified path
    *
    * @param {ParamsOfMnemonicDeriveSignKeys} param - parameters
    * @returns KeyPair
@@ -520,5 +557,60 @@ export class CryptoModule {
    */
   remove_signing_box(params: RegisteredSigningBox): Promise<undefined> {
     return this.tonClient.request("crypto.remove_signing_box", params);
+  }
+
+  /**
+   * Register an application implemented encryption box.
+   *
+   *
+   * @returns RegisteredEncryptionBox
+   */
+  register_encryption_box(): Promise<RegisteredEncryptionBox> {
+    return this.tonClient.request("crypto.register_encryption_box");
+  }
+
+  /**
+   * Removes encryption box from SDK
+   *
+   * @param {RegisteredEncryptionBox} param - parameters
+   */
+  remove_encryption_box(params: RegisteredEncryptionBox): Promise<undefined> {
+    return this.tonClient.request("crypto.remove_encryption_box", params);
+  }
+
+  /**
+   * Queries info from the given encryption box
+   *
+   * @param {ParamsOfEncryptionBoxGetInfo} param - parameters
+   * @returns ResultOfEncryptionBoxGetInfo
+   */
+  encryption_box_get_info(
+    params: ParamsOfEncryptionBoxGetInfo
+  ): Promise<ResultOfEncryptionBoxGetInfo> {
+    return this.tonClient.request("crypto.encryption_box_get_info", params);
+  }
+
+  /**
+   * Encrypts data using given encryption box
+   *
+   * @param {ParamsOfEncryptionBoxEncrypt} param - parameters
+   * @returns ResultOfEncryptionBoxEncrypt
+   */
+  encryption_box_encrypt(
+    params: ParamsOfEncryptionBoxEncrypt
+  ): Promise<ResultOfEncryptionBoxEncrypt> {
+    return this.tonClient.request("crypto.encryption_box_encrypt", params);
+  }
+
+  /**
+   * Decrypts data using given encryption box
+   *
+   * @param {ParamsOfEncryptionBoxDecrypt} param - parameters
+   * @returns ResultOfEncryptionBoxDecrypt
+   */
+  encryption_box_decrypt(
+    params: ParamsOfEncryptionBoxDecrypt
+  ): Promise<ResultOfEncryptionBoxDecrypt> {
+    return this.tonClient.request("crypto.encryption_box_decrypt", params);
   }
 }

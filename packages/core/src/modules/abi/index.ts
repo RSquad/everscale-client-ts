@@ -15,6 +15,8 @@ import {
   ParamsOfDecodeMessageBody,
   ParamsOfEncodeAccount,
   ResultOfEncodeAccount,
+  ParamsOfDecodeAccountData,
+  ResultOfDecodeData,
 } from "./types";
 
 /**
@@ -168,5 +170,20 @@ export class AbiModule {
     params: ParamsOfEncodeAccount
   ): Promise<ResultOfEncodeAccount> {
     return this.tonClient.request("abi.encode_account", params);
+  }
+
+  /**
+   * Decodes account data using provided data BOC and ABI.
+   *
+   * @remarks
+   * Note: this feature requires ABI 2.1 or higher.
+   *
+   * @param {ParamsOfDecodeAccountData} param - parameters
+   * @returns ResultOfDecodeData
+   */
+  decode_account_data(
+    params: ParamsOfDecodeAccountData
+  ): Promise<ResultOfDecodeData> {
+    return this.tonClient.request("abi.decode_account_data", params);
   }
 }

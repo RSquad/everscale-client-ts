@@ -1,3 +1,5 @@
+import { DecodedMessageBody, Abi } from "../abi/types";
+
 export type NetErrorCode =
   | "QueryFailed"
   | "SubscribeFailed"
@@ -48,6 +50,72 @@ export type FieldAggregation = {
 };
 
 export type AggregationFn = "COUNT" | "MIN" | "MAX" | "SUM" | "AVERAGE";
+
+export type TransactionNode = {
+  /**
+   * id - Transaction id.
+   */
+  id: string;
+  /**
+   * in_msg - In message id.
+   */
+  in_msg: string;
+  /**
+   * out_msgs - Out message ids.
+   */
+  out_msgs: string[];
+  /**
+   * account_addr - Account address.
+   */
+  account_addr: string;
+  /**
+   * total_fees - Transactions total fees.
+   */
+  total_fees: string;
+  /**
+   * aborted - Aborted flag.
+   */
+  aborted: boolean;
+  /**
+   * exit_code - Compute phase exit code.
+   */
+  exit_code?: number;
+};
+
+export type MessageNode = {
+  /**
+   * id - Message id.
+   */
+  id: string;
+  /**
+   * src_transaction_id - Source transaction id.
+   */
+  src_transaction_id?: string;
+  /**
+   * dst_transaction_id - Destination transaction id.
+   */
+  dst_transaction_id?: string;
+  /**
+   * src - Source address.
+   */
+  src?: string;
+  /**
+   * dst - Destination address.
+   */
+  dst?: string;
+  /**
+   * value - Transferred tokens value.
+   */
+  value?: string;
+  /**
+   * bounce - Bounce flag.
+   */
+  bounce: boolean;
+  /**
+   * decoded_body - Decoded body.
+   */
+  decoded_body?: DecodedMessageBody;
+};
 
 export type ParamsOfQuery = {
   /**
@@ -193,6 +261,17 @@ export type EndpointsSet = {
   endpoints: string[];
 };
 
+export type ResultOfGetEndpoints = {
+  /**
+   * query - Current query endpoint
+   */
+  query: string;
+  /**
+   * endpoints - List of all endpoints used by client
+   */
+  endpoints: string[];
+};
+
 export type ParamsOfQueryCounterparties = {
   /**
    * account - Account address
@@ -210,4 +289,125 @@ export type ParamsOfQueryCounterparties = {
    * after - `cursor` field of the last received result
    */
   after?: string;
+};
+
+export type ParamsOfQueryTransactionTree = {
+  /**
+   * in_msg - Input message id.
+   */
+  in_msg: string;
+  /**
+   * abi_registry - List of contract ABIs that will be used to decode message bodies. Library will try to decode each returned message body using any ABI from the registry.
+   */
+  abi_registry?: Abi[];
+  /**
+   * timeout - Timeout used to limit waiting time for the missing messages and transaction.
+   */
+  timeout?: number;
+};
+
+export type ResultOfQueryTransactionTree = {
+  /**
+   * messages - Messages.
+   */
+  messages: MessageNode[];
+  /**
+   * transactions - Transactions.
+   */
+  transactions: TransactionNode[];
+};
+
+export type ParamsOfCreateBlockIterator = {
+  /**
+   * start_time - Starting time to iterate from.
+   */
+  start_time?: number;
+  /**
+   * end_time - Optional end time to iterate for.
+   */
+  end_time?: number;
+  /**
+   * shard_filter - Shard prefix filter.
+   */
+  shard_filter?: string[];
+  /**
+   * result - Projection (result) string.
+   */
+  result?: string;
+};
+
+export type RegisteredIterator = {
+  /**
+   * handle - Iterator handle.
+   */
+  handle: number;
+};
+
+export type ParamsOfResumeBlockIterator = {
+  resume_state: any;
+};
+
+export type ParamsOfCreateTransactionIterator = {
+  /**
+   * start_time - Starting time to iterate from.
+   */
+  start_time?: number;
+  /**
+   * end_time - Optional end time to iterate for.
+   */
+  end_time?: number;
+  /**
+   * shard_filter - Shard prefix filters.
+   */
+  shard_filter?: string[];
+  /**
+   * accounts_filter - Account address filter.
+   */
+  accounts_filter?: string[];
+  /**
+   * result - Projection (result) string.
+   */
+  result?: string;
+  /**
+   * include_transfers - Include `transfers` field in iterated transactions.
+   */
+  include_transfers?: boolean;
+};
+
+export type ParamsOfResumeTransactionIterator = {
+  resume_state: any;
+  /**
+   * accounts_filter - Account address filter.
+   */
+  accounts_filter?: string[];
+};
+
+export type ParamsOfIteratorNext = {
+  /**
+   * iterator - Iterator handle
+   */
+  iterator: number;
+  /**
+   * limit - Maximum count of the returned items.
+   */
+  limit?: number;
+  /**
+   * return_resume_state - Indicates that function must return the iterator state that can be used for resuming iteration.
+   */
+  return_resume_state?: boolean;
+};
+
+export type ResultOfIteratorNext = {
+  /**
+   * items - Next available items.
+   */
+  items: any[];
+  /**
+   * has_more - Indicates that there are more available items in iterated range.
+   */
+  has_more: boolean;
+  /**
+   * resume_state - Optional iterator state that can be used for resuming iteration.
+   */
+  resume_state?: any;
 };

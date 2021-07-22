@@ -12,6 +12,8 @@ export type AddressStringFormat =
       bounce: boolean;
     };
 
+export type AccountAddressType = "AccountId" | "Hex" | "Base64";
+
 export type ParamsOfConvertAddress = {
   /**
    * address - Account address in any TON format.
@@ -25,6 +27,17 @@ export type ResultOfConvertAddress = {
    * address - Address in the specified format
    */
   address: string;
+};
+
+export type ParamsOfGetAddressType = {
+  /**
+   * address - Account address in any TON format.
+   */
+  address: string;
+};
+
+export type ResultOfGetAddressType = {
+  address_type: AccountAddressType;
 };
 
 export type ParamsOfCalcStorageFee = {
