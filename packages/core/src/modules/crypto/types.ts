@@ -19,7 +19,13 @@ export type CryptoErrorCode =
   | "MnemonicFromEntropyFailed"
   | "SigningBoxNotRegistered"
   | "InvalidSignature"
-  | "EncryptionBoxNotRegistered";
+  | "EncryptionBoxNotRegistered"
+  | "InvalidIvSize"
+  | "UnsupportedCipherMode"
+  | "CannotCreateCipher"
+  | "EncryptDataError"
+  | "DecryptDataError"
+  | "IvRequired";
 
 export type SigningBoxHandle = number;
 
@@ -42,6 +48,24 @@ export type EncryptionBoxInfo = {
    * public - Public information, depends on algorithm
    */
   public?: any;
+};
+
+export type EncryptionAlgorithm = {
+  type: "AES";
+  value: AesParams;
+};
+
+export type CipherMode = "CBC" | "CFB" | "CTR" | "ECB" | "OFB";
+
+export type AesParams = {
+  mode: CipherMode;
+  key: string;
+  iv?: string;
+};
+
+export type AesInfo = {
+  mode: CipherMode;
+  iv?: string;
 };
 
 export type ParamsOfFactorize = {
@@ -709,7 +733,7 @@ export type ParamsOfEncryptionBoxEncrypt = {
 
 export type ResultOfEncryptionBoxEncrypt = {
   /**
-   * data - Encrypted data, encoded in Base64
+   * data - Encrypted data, encoded in Base64.
    */
   data: string;
 };
@@ -724,7 +748,11 @@ export type ParamsOfEncryptionBoxDecrypt = {
 
 export type ResultOfEncryptionBoxDecrypt = {
   /**
-   * data - Decrypted data, encoded in Base64
+   * data - Decrypted data, encoded in Base64.
    */
   data: string;
+};
+
+export type ParamsOfCreateEncryptionBox = {
+  algorithm: EncryptionAlgorithm;
 };

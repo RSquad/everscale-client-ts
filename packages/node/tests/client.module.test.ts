@@ -10,7 +10,7 @@ test("version return correct version of TON-SDK", async () => {
   // console.log(
   //   `VERSION: ${JSON.stringify(await tonClient.client.get_api_reference())}`
   // );
-  expect(version).toBe("1.20.0");
+  expect(version).toBe("1.21.2");
 });
 
 test("get_api_reference return non empty modules", async () => {
@@ -19,10 +19,7 @@ test("get_api_reference return non empty modules", async () => {
   });
   const result = await tonClient.client.get_api_reference();
   console.log(result);
-  fs.writeFileSync(
-    `../../api.json`,
-    JSON.stringify(result)
-  );
+  fs.writeFileSync(`../../api.json`, JSON.stringify(result));
   expect(result.api.modules).toBeTruthy();
   expect(result.api.modules).not.toHaveLength(0);
 });

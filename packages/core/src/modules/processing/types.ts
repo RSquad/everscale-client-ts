@@ -18,21 +18,21 @@ export type ProcessingErrorCode =
   | "ExternalSignerMustNotBeUsed";
 
 /**
- * * WillFetchFirstBlock - Notifies the app that the current shard block will be fetched from the network.
+ * * WillFetchFirstBlock - Notifies the application that the account's current shard block will be fetched from the network. This step is performed before the message sending so that sdk knows starting from which block it will search for the transaction.
  * 
- * * FetchFirstBlockFailed - Notifies the app that the client has failed to fetch current shard block.
+ * * FetchFirstBlockFailed - Notifies the app that the client has failed to fetch the account's current shard block.
  * 
- * * WillSend - Notifies the app that the message will be sent to the network.
+ * * WillSend - Notifies the app that the message will be sent to the network. This event means that the account's current shard block was successfully fetched and the message was successfully created (`abi.encode_message` function was executed successfully).
  * 
- * * DidSend - Notifies the app that the message was sent to the network.
+ * * DidSend - Notifies the app that the message was sent to the network, i.e `processing.send_message` was successfuly executed. Now, the message is in the blockchain. If Application exits at this phase, Developer needs to proceed with processing after the application is restored with `wait_for_transaction` function, passing shard_block_id and message from this event.
  * 
  * * SendFailed - Notifies the app that the sending operation was failed with network error.
  * 
  * * WillFetchNextBlock - Notifies the app that the next shard block will be fetched from the network.
  * 
- * * FetchNextBlockFailed - Notifies the app that the next block can't be fetched due to error.
+ * * FetchNextBlockFailed - Notifies the app that the next block can't be fetched.
  * 
- * * MessageExpired - Notifies the app that the message was expired.
+ * * MessageExpired - Notifies the app that the message was not executed within expire timeout on-chain and will never be because it is already expired. The expiration timeout can be configured with `AbiConfig` parameters.
  * 
 
 */

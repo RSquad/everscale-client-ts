@@ -1,6 +1,6 @@
 {
   "name": "@ton-client-ts/web",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Zero dependency cross-platform bindings for TON-SDK written in TypeScript",
   "main": "./dist/main.js",
   "license": "Apache-2.0",
@@ -17,5 +17,5 @@
   "dependencies": {
     "@ton-client-ts/core": "^1.1.0"
   },
-  "gitHead": "1ceb118ac7efe8c320682de0eec8ba24bebeaa79"
+  "gitHead": "8cae9e7c660870f9359a14c1710a4a6d17864f6e"
 }

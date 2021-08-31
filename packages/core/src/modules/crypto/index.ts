@@ -70,6 +70,7 @@ import {
   ResultOfEncryptionBoxEncrypt,
   ParamsOfEncryptionBoxDecrypt,
   ResultOfEncryptionBoxDecrypt,
+  ParamsOfCreateEncryptionBox,
 } from "./types";
 
 /**
@@ -591,7 +592,11 @@ export class CryptoModule {
   }
 
   /**
-   * Encrypts data using given encryption box
+   * Encrypts data using given encryption box Note.
+   *
+   * @remarks
+   * Block cipher algorithms pad data to cipher block size so encrypted data can be longer then original data. Client should store the original data size after encryption and use it after
+   * decryption to retrieve the original data from decrypted data.
    *
    * @param {ParamsOfEncryptionBoxEncrypt} param - parameters
    * @returns ResultOfEncryptionBoxEncrypt
@@ -603,7 +608,11 @@ export class CryptoModule {
   }
 
   /**
-   * Decrypts data using given encryption box
+   * Decrypts data using given encryption box Note.
+   *
+   * @remarks
+   * Block cipher algorithms pad data to cipher block size so encrypted data can be longer then original data. Client should store the original data size after encryption and use it after
+   * decryption to retrieve the original data from decrypted data.
    *
    * @param {ParamsOfEncryptionBoxDecrypt} param - parameters
    * @returns ResultOfEncryptionBoxDecrypt
@@ -612,5 +621,17 @@ export class CryptoModule {
     params: ParamsOfEncryptionBoxDecrypt
   ): Promise<ResultOfEncryptionBoxDecrypt> {
     return this.tonClient.request("crypto.encryption_box_decrypt", params);
+  }
+
+  /**
+   * Creates encryption box with specified algorithm
+   *
+   * @param {ParamsOfCreateEncryptionBox} param - parameters
+   * @returns RegisteredEncryptionBox
+   */
+  create_encryption_box(
+    params: ParamsOfCreateEncryptionBox
+  ): Promise<RegisteredEncryptionBox> {
+    return this.tonClient.request("crypto.create_encryption_box", params);
   }
 }
