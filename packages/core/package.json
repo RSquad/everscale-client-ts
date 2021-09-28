@@ -11,7 +11,7 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
     }
   ],
-  "gitHead": "8cae9e7c660870f9359a14c1710a4a6d17864f6e",
+  "gitHead": "84a7c61bfdc2d447b2b380bd14f7514bec25a0e4",
   "scripts": {
     "build:webpack": "webpack --progress --mode production --config ../../webpack.config.node.js"
   }

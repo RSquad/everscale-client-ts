@@ -19,5 +19,5 @@
     "@ton-client-ts/core": "^1.1.0",
     "@types/jest": "^26.0.24"
   },
-  "gitHead": "8cae9e7c660870f9359a14c1710a4a6d17864f6e"
+  "gitHead": "84a7c61bfdc2d447b2b380bd14f7514bec25a0e4"
 }
