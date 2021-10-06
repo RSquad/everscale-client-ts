@@ -16,6 +16,16 @@ import {
   ParamsOfBocCacheUnpin,
   ParamsOfEncodeBoc,
   ResultOfEncodeBoc,
+  ParamsOfGetCodeSalt,
+  ResultOfGetCodeSalt,
+  ParamsOfSetCodeSalt,
+  ResultOfSetCodeSalt,
+  ParamsOfDecodeTvc,
+  ResultOfDecodeTvc,
+  ParamsOfEncodeTvc,
+  ResultOfEncodeTvc,
+  ParamsOfGetCompilerVersion,
+  ResultOfGetCompilerVersion,
 } from "./types";
 
 /**
@@ -159,12 +169,67 @@ export class BocModule {
   }
 
   /**
-   * Encodes BOC from builder operations.
+   * Encodes bag of cells (BOC) with builder operations. This method provides the same functionality as Solidity TvmBuilder. Resulting BOC of this method can be passed into Solidity and C++ contracts as TvmCell type
    *
    * @param {ParamsOfEncodeBoc} param - parameters
    * @returns ResultOfEncodeBoc
    */
   encode_boc(params: ParamsOfEncodeBoc): Promise<ResultOfEncodeBoc> {
     return this.tonClient.request("boc.encode_boc", params);
+  }
+
+  /**
+   * Returns the contract code's salt if it is present.
+   *
+   * @param {ParamsOfGetCodeSalt} param - parameters
+   * @returns ResultOfGetCodeSalt
+   */
+  get_code_salt(params: ParamsOfGetCodeSalt): Promise<ResultOfGetCodeSalt> {
+    return this.tonClient.request("boc.get_code_salt", params);
+  }
+
+  /**
+   * Sets new salt to contract code.
+   *
+   * @remarks
+   * Returns the new contract code with salt.
+   *
+   * @param {ParamsOfSetCodeSalt} param - parameters
+   * @returns ResultOfSetCodeSalt
+   */
+  set_code_salt(params: ParamsOfSetCodeSalt): Promise<ResultOfSetCodeSalt> {
+    return this.tonClient.request("boc.set_code_salt", params);
+  }
+
+  /**
+   * Decodes tvc into code, data, libraries and special options.
+   *
+   * @param {ParamsOfDecodeTvc} param - parameters
+   * @returns ResultOfDecodeTvc
+   */
+  decode_tvc(params: ParamsOfDecodeTvc): Promise<ResultOfDecodeTvc> {
+    return this.tonClient.request("boc.decode_tvc", params);
+  }
+
+  /**
+   * Encodes tvc from code, data, libraries ans special options (see input params)
+   *
+   * @param {ParamsOfEncodeTvc} param - parameters
+   * @returns ResultOfEncodeTvc
+   */
+  encode_tvc(params: ParamsOfEncodeTvc): Promise<ResultOfEncodeTvc> {
+    return this.tonClient.request("boc.encode_tvc", params);
+  }
+
+  /**
+   * Returns the compiler version used to compile the code.
+   *
+   * @param {ParamsOfGetCompilerVersion} param - parameters
+   * @returns ResultOfGetCompilerVersion
+   */
+  get_compiler_version(
+    params: ParamsOfGetCompilerVersion
+  ): Promise<ResultOfGetCompilerVersion> {
+    return this.tonClient.request("boc.get_compiler_version", params);
   }
 }

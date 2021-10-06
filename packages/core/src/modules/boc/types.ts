@@ -77,7 +77,7 @@ export type ResultOfGetBocHash = {
 
 export type ParamsOfGetCodeFromTvc = {
   /**
-   * tvc - Contract TVC image encoded as base64
+   * tvc - Contract TVC image or image BOC handle
    */
   tvc: string;
 };
@@ -175,4 +175,134 @@ export type ResultOfEncodeBoc = {
    * boc - Encoded cell BOC or BOC cache key.
    */
   boc: string;
+};
+
+export type ParamsOfGetCodeSalt = {
+  /**
+   * code - Contract code BOC encoded as base64 or code BOC handle
+   */
+  code: string;
+  /**
+   * boc_cache - Cache type to put the result. The BOC itself returned if no cache type provided.
+   */
+  boc_cache?: BocCacheType;
+};
+
+export type ResultOfGetCodeSalt = {
+  /**
+   * salt - Contract code salt if present.
+   */
+  salt?: string;
+};
+
+export type ParamsOfSetCodeSalt = {
+  /**
+   * code - Contract code BOC encoded as base64 or code BOC handle
+   */
+  code: string;
+  /**
+   * salt - Code salt to set.
+   */
+  salt: string;
+  /**
+   * boc_cache - Cache type to put the result. The BOC itself returned if no cache type provided.
+   */
+  boc_cache?: BocCacheType;
+};
+
+export type ResultOfSetCodeSalt = {
+  /**
+   * code - Contract code with salt set.
+   */
+  code: string;
+};
+
+export type ParamsOfDecodeTvc = {
+  /**
+   * tvc - Contract TVC image BOC encoded as base64 or BOC handle
+   */
+  tvc: string;
+  /**
+   * boc_cache - Cache type to put the result. The BOC itself returned if no cache type provided.
+   */
+  boc_cache?: BocCacheType;
+};
+
+export type ResultOfDecodeTvc = {
+  /**
+   * code - Contract code BOC encoded as base64 or BOC handle
+   */
+  code?: string;
+  /**
+   * data - Contract data BOC encoded as base64 or BOC handle
+   */
+  data?: string;
+  /**
+   * library - Contract library BOC encoded as base64 or BOC handle
+   */
+  library?: string;
+  /**
+   * tick - `special.tick` field.
+   */
+  tick?: boolean;
+  /**
+   * tock - `special.tock` field.
+   */
+  tock?: boolean;
+  /**
+   * split_depth - Is present and non-zero only in instances of large smart contracts
+   */
+  split_depth?: number;
+};
+
+export type ParamsOfEncodeTvc = {
+  /**
+   * code - Contract code BOC encoded as base64 or BOC handle
+   */
+  code?: string;
+  /**
+   * data - Contract data BOC encoded as base64 or BOC handle
+   */
+  data?: string;
+  /**
+   * library - Contract library BOC encoded as base64 or BOC handle
+   */
+  library?: string;
+  /**
+   * tick - `special.tick` field.
+   */
+  tick?: boolean;
+  /**
+   * tock - `special.tock` field.
+   */
+  tock?: boolean;
+  /**
+   * split_depth - Is present and non-zero only in instances of large smart contracts
+   */
+  split_depth?: number;
+  /**
+   * boc_cache - Cache type to put the result. The BOC itself returned if no cache type provided.
+   */
+  boc_cache?: BocCacheType;
+};
+
+export type ResultOfEncodeTvc = {
+  /**
+   * tvc - Contract TVC image BOC encoded as base64 or BOC handle of boc_cache parameter was specified
+   */
+  tvc: string;
+};
+
+export type ParamsOfGetCompilerVersion = {
+  /**
+   * code - Contract code BOC encoded as base64 or code BOC handle
+   */
+  code: string;
+};
+
+export type ResultOfGetCompilerVersion = {
+  /**
+   * version - Compiler version, for example 'sol 0.49.0'
+   */
+  version?: string;
 };

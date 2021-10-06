@@ -17,6 +17,10 @@ import {
   ResultOfEncodeAccount,
   ParamsOfDecodeAccountData,
   ResultOfDecodeData,
+  ParamsOfUpdateInitialData,
+  ResultOfUpdateInitialData,
+  ParamsOfDecodeInitialData,
+  ResultOfDecodeInitialData,
 } from "./types";
 
 /**
@@ -185,5 +189,29 @@ export class AbiModule {
     params: ParamsOfDecodeAccountData
   ): Promise<ResultOfDecodeData> {
     return this.tonClient.request("abi.decode_account_data", params);
+  }
+
+  /**
+   * Updates initial account data with initial values for the contract's static variables and owner's public key. This operation is applicable only for initial account data (before deploy). If the contract is already deployed, its data doesn't contain this data section any more.
+   *
+   * @param {ParamsOfUpdateInitialData} param - parameters
+   * @returns ResultOfUpdateInitialData
+   */
+  update_initial_data(
+    params: ParamsOfUpdateInitialData
+  ): Promise<ResultOfUpdateInitialData> {
+    return this.tonClient.request("abi.update_initial_data", params);
+  }
+
+  /**
+   * Decodes initial values of a contract's static variables and owner's public key from account initial data This operation is applicable only for initial account data (before deploy). If the contract is already deployed, its data doesn't contain this data section any more.
+   *
+   * @param {ParamsOfDecodeInitialData} param - parameters
+   * @returns ResultOfDecodeInitialData
+   */
+  decode_initial_data(
+    params: ParamsOfDecodeInitialData
+  ): Promise<ResultOfDecodeInitialData> {
+    return this.tonClient.request("abi.decode_initial_data", params);
   }
 }

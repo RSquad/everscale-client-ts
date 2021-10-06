@@ -14,7 +14,8 @@ export type AbiErrorCode =
   | "InvalidSigner"
   | "InvalidAbi"
   | "InvalidFunctionId"
-  | "InvalidData";
+  | "InvalidData"
+  | "EncodeInitialDataFailed";
 
 export type Abi =
   | {
@@ -447,4 +448,56 @@ export type ParamsOfDecodeAccountData = {
 
 export type ResultOfDecodeData = {
   data: any;
+};
+
+export type ParamsOfUpdateInitialData = {
+  /**
+   * abi - Contract ABI
+   */
+  abi?: Abi;
+  /**
+   * data - Data BOC or BOC handle
+   */
+  data: string;
+  /**
+   * initial_data - List of initial values for contract's static variables.
+   */
+  initial_data?: any;
+  /**
+   * initial_pubkey - Initial account owner's public key to set into account data
+   */
+  initial_pubkey?: string;
+  /**
+   * boc_cache - Cache type to put the result. The BOC itself returned if no cache type provided.
+   */
+  boc_cache?: BocCacheType;
+};
+
+export type ResultOfUpdateInitialData = {
+  /**
+   * data - Updated data BOC or BOC handle
+   */
+  data: string;
+};
+
+export type ParamsOfDecodeInitialData = {
+  /**
+   * abi - Contract ABI.
+   */
+  abi?: Abi;
+  /**
+   * data - Data BOC or BOC handle
+   */
+  data: string;
+};
+
+export type ResultOfDecodeInitialData = {
+  /**
+   * initial_data - List of initial values of contract's public variables.
+   */
+  initial_data?: any;
+  /**
+   * initial_pubkey - Initial account owner's public key
+   */
+  initial_pubkey: string;
 };
