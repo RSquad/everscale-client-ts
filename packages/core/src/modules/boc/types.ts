@@ -63,7 +63,7 @@ export type ResultOfGetBlockchainConfig = {
 
 export type ParamsOfGetBocHash = {
   /**
-   * boc - BOC encoded as base64
+   * boc - BOC encoded as base64 or BOC handle
    */
   boc: string;
 };
@@ -73,6 +73,20 @@ export type ResultOfGetBocHash = {
    * hash - BOC root hash encoded with hex
    */
   hash: string;
+};
+
+export type ParamsOfGetBocDepth = {
+  /**
+   * boc - BOC encoded as base64 or BOC handle
+   */
+  boc: string;
+};
+
+export type ResultOfGetBocDepth = {
+  /**
+   * depth - BOC root cell depth
+   */
+  depth: number;
 };
 
 export type ParamsOfGetCodeFromTvc = {
@@ -234,9 +248,25 @@ export type ResultOfDecodeTvc = {
    */
   code?: string;
   /**
+   * code_hash - Contract code hash
+   */
+  code_hash?: string;
+  /**
+   * code_depth - Contract code depth
+   */
+  code_depth?: number;
+  /**
    * data - Contract data BOC encoded as base64 or BOC handle
    */
   data?: string;
+  /**
+   * data_hash - Contract data hash
+   */
+  data_hash?: string;
+  /**
+   * data_depth - Contract data depth
+   */
+  data_depth?: number;
   /**
    * library - Contract library BOC encoded as base64 or BOC handle
    */
@@ -253,6 +283,10 @@ export type ResultOfDecodeTvc = {
    * split_depth - Is present and non-zero only in instances of large smart contracts
    */
   split_depth?: number;
+  /**
+   * compiler_version - Compiler version, for example 'sol 0.49.0'
+   */
+  compiler_version?: string;
 };
 
 export type ParamsOfEncodeTvc = {

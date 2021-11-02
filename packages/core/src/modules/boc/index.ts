@@ -7,6 +7,8 @@ import {
   ResultOfGetBlockchainConfig,
   ParamsOfGetBocHash,
   ResultOfGetBocHash,
+  ParamsOfGetBocDepth,
+  ResultOfGetBocDepth,
   ParamsOfGetCodeFromTvc,
   ResultOfGetCodeFromTvc,
   ParamsOfBocCacheGet,
@@ -122,6 +124,16 @@ export class BocModule {
    */
   get_boc_hash(params: ParamsOfGetBocHash): Promise<ResultOfGetBocHash> {
     return this.tonClient.request("boc.get_boc_hash", params);
+  }
+
+  /**
+   * Calculates BOC depth
+   *
+   * @param {ParamsOfGetBocDepth} param - parameters
+   * @returns ResultOfGetBocDepth
+   */
+  get_boc_depth(params: ParamsOfGetBocDepth): Promise<ResultOfGetBocDepth> {
+    return this.tonClient.request("boc.get_boc_depth", params);
   }
 
   /**
