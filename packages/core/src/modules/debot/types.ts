@@ -12,7 +12,8 @@ export type DebotErrorCode =
   | "DebotInvalidMsg"
   | "DebotExternalCallFailed"
   | "DebotBrowserCallbackFailed"
-  | "DebotOperationRejected";
+  | "DebotOperationRejected"
+  | "DebotNoCode";
 
 export type DebotHandle = number;
 
@@ -88,6 +89,10 @@ export type DebotInfo = {
    * interfaces - Vector with IDs of DInterfaces used by DeBot.
    */
   interfaces: string[];
+  /**
+   * dabiVersion - ABI version ("x.y") supported by DeBot
+   */
+  dabiVersion: string;
 };
 
 /**

@@ -446,7 +446,7 @@ export type ParamsOfDecodeAccountData = {
   data: string;
 };
 
-export type ResultOfDecodeData = {
+export type ResultOfDecodeAccountData = {
   data: any;
 };
 
@@ -500,4 +500,20 @@ export type ResultOfDecodeInitialData = {
    * initial_pubkey - Initial account owner's public key
    */
   initial_pubkey: string;
+};
+
+export type ParamsOfDecodeBoc = {
+  /**
+   * params - Parameters to decode from BOC
+   */
+  params: AbiParam[];
+  /**
+   * boc - Data BOC or BOC handle
+   */
+  boc: string;
+  allow_partial: boolean;
+};
+
+export type ResultOfDecodeBoc = {
+  data: any;
 };

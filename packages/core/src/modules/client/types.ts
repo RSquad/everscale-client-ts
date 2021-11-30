@@ -32,7 +32,8 @@ export type ClientErrorCode =
   | "UnexpectedCallbackResponse"
   | "CanNotParseNumber"
   | "InternalError"
-  | "InvalidHandle";
+  | "InvalidHandle"
+  | "LocalStorageError";
 
 export type ClientError = {
   code: number;
@@ -45,6 +46,11 @@ export type ClientConfig = {
   crypto?: CryptoConfig;
   abi?: AbiConfig;
   boc?: BocConfig;
+  proofs?: ProofsConfig;
+  /**
+   * local_storage_path - For file based storage is a folder name where SDK will store its data. For browser based is a browser async storage key prefix. Default (recommended) value is "~/.tonclient" for native environments and ".tonclient" for web-browser.
+   */
+  local_storage_path?: string;
 };
 
 export type NetworkConfig = {
@@ -93,7 +99,7 @@ export type NetworkConfig = {
    */
   latency_detection_interval?: number;
   /**
-   * max_latency - Maximum value for the endpoint's blockchain data syncronization latency (time-lag). Library periodically checks the current endpoint for blockchain data syncronization latency. If the latency (time-lag) is less then `NetworkConfig.max_latency` then library selects another endpoint.
+   * max_latency - Maximum value for the endpoint's blockchain data syncronization latency (time-lag). Library periodically checks the current endpoint for blockchain data synchronization latency. If the latency (time-lag) is less then `NetworkConfig.max_latency` then library selects another endpoint.
    */
   max_latency?: number;
   /**
@@ -141,6 +147,13 @@ export type BocConfig = {
    * cache_max_size - Maximum BOC cache size in kilobytes.
    */
   cache_max_size?: number;
+};
+
+export type ProofsConfig = {
+  /**
+   * cache_in_local_storage - Cache proofs in the local storage.
+   */
+  cache_in_local_storage?: boolean;
 };
 
 export type BuildInfoDependency = {
