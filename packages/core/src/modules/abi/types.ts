@@ -480,6 +480,32 @@ export type ResultOfUpdateInitialData = {
   data: string;
 };
 
+export type ParamsOfEncodeInitialData = {
+  /**
+   * abi - Contract ABI
+   */
+  abi?: Abi;
+  /**
+   * initial_data - List of initial values for contract's static variables.
+   */
+  initial_data?: any;
+  /**
+   * initial_pubkey - Initial account owner's public key to set into account data
+   */
+  initial_pubkey?: string;
+  /**
+   * boc_cache - Cache type to put the result. The BOC itself returned if no cache type provided.
+   */
+  boc_cache?: BocCacheType;
+};
+
+export type ResultOfEncodeInitialData = {
+  /**
+   * data - Updated data BOC or BOC handle
+   */
+  data: string;
+};
+
 export type ParamsOfDecodeInitialData = {
   /**
    * abi - Contract ABI.
