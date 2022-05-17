@@ -1,6 +1,6 @@
 {
   "name": "@ton-client-ts/node",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "description": "Zero dependency cross-platform bindings for TON-SDK written in TypeScript",
   "main": "./dist/main.js",
   "license": "Apache-2.0",
