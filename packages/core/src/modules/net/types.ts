@@ -240,6 +240,17 @@ export type ParamsOfSubscribeCollection = {
   result: string;
 };
 
+export type ParamsOfSubscribe = {
+  /**
+   * subscription - GraphQL subscription text.
+   */
+  subscription: string;
+  /**
+   * variables - Variables used in subscription.
+   */
+  variables?: any;
+};
+
 export type ParamsOfFindLastShardBlock = {
   /**
    * address - Account address

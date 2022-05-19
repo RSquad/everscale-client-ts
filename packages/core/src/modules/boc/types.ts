@@ -148,9 +148,11 @@ export type ParamsOfBocCacheUnpin = {
  * 
  * * BitString - Append bit string to cell data.
  * 
- * * Cell - Append ref to nested cells
+ * * Cell - Append ref to nested cells.
  * 
- * * CellBoc - Append ref to nested cell
+ * * CellBoc - Append ref to nested cell.
+ * 
+ * * Address - Address.
  * 
 
 */
@@ -171,6 +173,10 @@ export type BuilderOp =
   | {
       type: "CellBoc";
       boc: string;
+    }
+  | {
+      type: "Address";
+      address: string;
     };
 
 export type ParamsOfEncodeBoc = {
@@ -325,6 +331,40 @@ export type ResultOfEncodeTvc = {
    * tvc - Contract TVC image BOC encoded as base64 or BOC handle of boc_cache parameter was specified
    */
   tvc: string;
+};
+
+export type ParamsOfEncodeExternalInMessage = {
+  /**
+   * src - Source address.
+   */
+  src?: string;
+  /**
+   * dst - Destination address.
+   */
+  dst: string;
+  /**
+   * init - Bag of cells with state init (used in deploy messages).
+   */
+  init?: string;
+  /**
+   * body - Bag of cells with the message body encoded as base64.
+   */
+  body?: string;
+  /**
+   * boc_cache - Cache type to put the result.
+   */
+  boc_cache?: BocCacheType;
+};
+
+export type ResultOfEncodeExternalInMessage = {
+  /**
+   * message - Message BOC encoded with `base64`.
+   */
+  message: string;
+  /**
+   * message_id - Message id.
+   */
+  message_id: string;
 };
 
 export type ParamsOfGetCompilerVersion = {

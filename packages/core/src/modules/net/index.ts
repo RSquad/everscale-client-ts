@@ -12,6 +12,7 @@ import {
   ResultOfWaitForCollection,
   ResultOfSubscribeCollection,
   ParamsOfSubscribeCollection,
+  ParamsOfSubscribe,
   ParamsOfFindLastShardBlock,
   ResultOfFindLastShardBlock,
   EndpointsSet,
@@ -123,7 +124,7 @@ export class NetModule {
   }
 
   /**
-   * Creates a subscription
+   * Creates a collection subscription
    *
    * @remarks
    * Triggers for each insert/update of data that satisfies
@@ -183,6 +184,56 @@ export class NetModule {
   }
 
   /**
+   * Creates a subscription
+   *
+   * @remarks
+   * The subscription is a persistent communication channel between
+   * client and Everscale Network.
+   *
+   * ### Important Notes on Subscriptions
+   *
+   * Unfortunately sometimes the connection with the network brakes down.
+   * In this situation the library attempts to reconnect to the network.
+   * This reconnection sequence can take significant time.
+   * All of this time the client is disconnected from the network.
+   *
+   * Bad news is that all changes that happened while
+   * the client was disconnected are lost.
+   *
+   * Good news is that the client report errors to the callback when
+   * it loses and resumes connection.
+   *
+   * So, if the lost changes are important to the application then
+   * the application must handle these error reports.
+   *
+   * Library reports errors with `responseType` == 101
+   * and the error object passed via `params`.
+   *
+   * When the library has successfully reconnected
+   * the application receives callback with
+   * `responseType` == 101 and `params.code` == 614 (NetworkModuleResumed).
+   *
+   * Application can use several ways to handle this situation:
+   * - If application monitors changes for the single
+   * object (for example specific account):  application
+   * can perform a query for this object and handle actual data as a
+   * regular data from the subscription.
+   * - If application monitors sequence of some objects
+   * (for example transactions of the specific account): application must
+   * refresh all cached (or visible to user) lists where this sequences presents.
+   *
+   * @param {ParamsOfSubscribe} param - parameters
+   * @param {Request} responseHandler - Request callback
+   * @returns ResultOfSubscribeCollection
+   */
+  subscribe(
+    params: ParamsOfSubscribe,
+    responseHandler?: ResponseHandler
+  ): Promise<ResultOfSubscribeCollection> {
+    return this.tonClient.request("net.subscribe", params, responseHandler);
+  }
+
+  /**
    * Suspends network module to stop any network activity
    */
   suspend(): Promise<undefined> {
@@ -236,8 +287,8 @@ export class NetModule {
    *
    * @remarks
    * *Attention* this query retrieves data from 'Counterparties' service which is not supported in
-   * the opensource version of DApp Server (and will not be supported) as well as in TON OS SE (will be supported in SE in future),
-   * but is always accessible via [TON OS Devnet/Mainnet Clouds](https://docs.ton.dev/86757ecb2/p/85c869-networks)
+   * the opensource version of DApp Server (and will not be supported) as well as in Evernode SE (will be supported in SE in future),
+   * but is always accessible via [EVER OS Clouds](../ton-os-api/networks.md)
    *
    * @param {ParamsOfQueryCounterparties} param - parameters
    * @returns ResultOfQueryCollection

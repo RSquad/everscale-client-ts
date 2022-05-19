@@ -11,23 +11,23 @@ if (!fs.existsSync("./bin")) {
 const files = [
   {
     dst: "packages/node/src/tonclient-mac.node.gz",
-    url: "https://binaries.tonlabs.io/tonclient_1_nodejs_addon_x64-darwin.gz",
+    url: "https://binaries.tonlabs.io/eversdk_1_nodejs_addon_arm64-darwin.gz",
   },
   {
     dst: "packages/node/src/tonclient-win.node.gz",
-    url: "https://binaries.tonlabs.io/tonclient_1_nodejs_addon_x64-win32.gz",
+    url: "https://binaries.tonlabs.io/eversdk_1_nodejs_addon_x64-win32.gz",
   },
   {
     dst: "packages/node/src/tonclient-linux.node.gz",
-    url: "https://binaries.tonlabs.io/tonclient_1_nodejs_addon_x64-linux.gz",
+    url: "https://binaries.tonlabs.io/eversdk_1_nodejs_addon_x64-linux.gz",
   },
   {
     dst: "packages/web/src/tonclient.wasm.gz",
-    url: "https://binaries.tonlabs.io/tonclient_1_wasm.gz",
+    url: "https://binaries.tonlabs.io/eversdk_1_wasm.gz",
   },
   {
     dst: "packages/web/src/index.js.gz",
-    url: "https://binaries.tonlabs.io/tonclient_1_wasm_js.gz",
+    url: "https://binaries.tonlabs.io/eversdk_1_wasm_js.gz",
   },
 ];
 

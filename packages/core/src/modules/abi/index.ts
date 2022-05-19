@@ -25,6 +25,8 @@ import {
   ResultOfDecodeInitialData,
   ParamsOfDecodeBoc,
   ResultOfDecodeBoc,
+  ParamsOfAbiEncodeBoc,
+  ResultOfAbiEncodeBoc,
 } from "./types";
 
 /**
@@ -259,5 +261,15 @@ export class AbiModule {
    */
   decode_boc(params: ParamsOfDecodeBoc): Promise<ResultOfDecodeBoc> {
     return this.tonClient.request("abi.decode_boc", params);
+  }
+
+  /**
+   * Encodes given parameters in JSON into a BOC using param types from ABI.
+   *
+   * @param {ParamsOfAbiEncodeBoc} param - parameters
+   * @returns ResultOfAbiEncodeBoc
+   */
+  encode_boc(params: ParamsOfAbiEncodeBoc): Promise<ResultOfAbiEncodeBoc> {
+    return this.tonClient.request("abi.encode_boc", params);
   }
 }

@@ -55,15 +55,23 @@ import {
   ResultOfHDKeyPublicFromXPrv,
   ParamsOfChaCha20,
   ResultOfChaCha20,
+  ParamsOfCreateCryptoBox,
+  ParamsOfAppPasswordProvider,
+  ResultOfAppPasswordProvider,
+  RegisteredCryptoBox,
+  ResultOfGetCryptoBoxInfo,
+  ResultOfGetCryptoBoxSeedPhrase,
+  ParamsOfGetSigningBoxFromCryptoBox,
+  RegisteredSigningBox,
+  ParamsOfGetEncryptionBoxFromCryptoBox,
+  RegisteredEncryptionBox,
   ParamsOfAppSigningBox,
   ResultOfAppSigningBox,
-  RegisteredSigningBox,
   ResultOfSigningBoxGetPublicKey,
   ParamsOfSigningBoxSign,
   ResultOfSigningBoxSign,
   ParamsOfAppEncryptionBox,
   ResultOfAppEncryptionBox,
-  RegisteredEncryptionBox,
   ParamsOfEncryptionBoxGetInfo,
   ResultOfEncryptionBoxGetInfo,
   ParamsOfEncryptionBoxEncrypt,
@@ -505,6 +513,116 @@ export class CryptoModule {
    */
   chacha20(params: ParamsOfChaCha20): Promise<ResultOfChaCha20> {
     return this.tonClient.request("crypto.chacha20", params);
+  }
+
+  /**
+   * Creates a Crypto Box instance.
+   *
+   * @remarks
+   * Crypto Box is a root crypto object, that encapsulates some secret (seed phrase usually)
+   * in encrypted form and acts as a factory for all crypto primitives used in SDK:
+   * keys for signing and encryption, derived from this secret.
+   *
+   * Crypto Box encrypts original Seed Phrase with salt and password that is retrieved
+   * from `password_provider` callback, implemented on Application side.
+   *
+   * When used, decrypted secret shows up in core library's memory for a very short period
+   * of time and then is immediately overwritten with zeroes.
+   *
+   * @param {ParamsOfCreateCryptoBox} param - parameters
+   * @returns RegisteredCryptoBox
+   */
+  create_crypto_box(
+    params: ParamsOfCreateCryptoBox
+  ): Promise<RegisteredCryptoBox> {
+    return this.tonClient.request("crypto.create_crypto_box", params);
+  }
+
+  /**
+   * Removes Crypto Box. Clears all secret data.
+   *
+   * @param {RegisteredCryptoBox} param - parameters
+   */
+  remove_crypto_box(params: RegisteredCryptoBox): Promise<undefined> {
+    return this.tonClient.request("crypto.remove_crypto_box", params);
+  }
+
+  /**
+   * Get Crypto Box Info. Used to get `encrypted_secret` that should be used for all the cryptobox initializations except the first one.
+   *
+   * @param {RegisteredCryptoBox} param - parameters
+   * @returns ResultOfGetCryptoBoxInfo
+   */
+  get_crypto_box_info(
+    params: RegisteredCryptoBox
+  ): Promise<ResultOfGetCryptoBoxInfo> {
+    return this.tonClient.request("crypto.get_crypto_box_info", params);
+  }
+
+  /**
+   * Get Crypto Box Seed Phrase.
+   *
+   * @remarks
+   * Attention! Store this data in your application for a very short period of time and overwrite it with zeroes ASAP.
+   *
+   * @param {RegisteredCryptoBox} param - parameters
+   * @returns ResultOfGetCryptoBoxSeedPhrase
+   */
+  get_crypto_box_seed_phrase(
+    params: RegisteredCryptoBox
+  ): Promise<ResultOfGetCryptoBoxSeedPhrase> {
+    return this.tonClient.request("crypto.get_crypto_box_seed_phrase", params);
+  }
+
+  /**
+   * Get handle of Signing Box derived from Crypto Box.
+   *
+   * @param {ParamsOfGetSigningBoxFromCryptoBox} param - parameters
+   * @returns RegisteredSigningBox
+   */
+  get_signing_box_from_crypto_box(
+    params: ParamsOfGetSigningBoxFromCryptoBox
+  ): Promise<RegisteredSigningBox> {
+    return this.tonClient.request(
+      "crypto.get_signing_box_from_crypto_box",
+      params
+    );
+  }
+
+  /**
+   * Gets Encryption Box from Crypto Box.
+   *
+   * @remarks
+   * Derives encryption keypair from cryptobox secret and hdpath and
+   * stores it in cache for `secret_lifetime`
+   * or until explicitly cleared by `clear_crypto_box_secret_cache` method.
+   * If `secret_lifetime` is not specified - overwrites encryption secret with zeroes immediately after
+   * encryption operation.
+   *
+   * @param {ParamsOfGetEncryptionBoxFromCryptoBox} param - parameters
+   * @returns RegisteredEncryptionBox
+   */
+  get_encryption_box_from_crypto_box(
+    params: ParamsOfGetEncryptionBoxFromCryptoBox
+  ): Promise<RegisteredEncryptionBox> {
+    return this.tonClient.request(
+      "crypto.get_encryption_box_from_crypto_box",
+      params
+    );
+  }
+
+  /**
+   * Removes cached secrets (overwrites with zeroes) from all signing and encryption boxes, derived from crypto box.
+   *
+   * @param {RegisteredCryptoBox} param - parameters
+   */
+  clear_crypto_box_secret_cache(
+    params: RegisteredCryptoBox
+  ): Promise<undefined> {
+    return this.tonClient.request(
+      "crypto.clear_crypto_box_secret_cache",
+      params
+    );
   }
 
   /**

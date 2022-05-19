@@ -377,6 +377,10 @@ export type ParamsOfDecodeMessage = {
    * message - Message BOC
    */
   message: string;
+  /**
+   * allow_partial - Flag allowing partial BOC decoding when ABI doesn't describe the full body BOC. Controls decoder behaviour when after decoding all described in ABI params there are some data left in BOC: `true` - return decoded values `false` - return error of incomplete BOC deserialization (default)
+   */
+  allow_partial?: boolean;
 };
 
 export type DecodedMessageBody = {
@@ -405,6 +409,10 @@ export type ParamsOfDecodeMessageBody = {
    * is_internal - True if the body belongs to the internal message.
    */
   is_internal: boolean;
+  /**
+   * allow_partial - Flag allowing partial BOC decoding when ABI doesn't describe the full body BOC. Controls decoder behaviour when after decoding all described in ABI params there are some data left in BOC: `true` - return decoded values `false` - return error of incomplete BOC deserialization (default)
+   */
+  allow_partial?: boolean;
 };
 
 export type ParamsOfEncodeAccount = {
@@ -444,6 +452,10 @@ export type ParamsOfDecodeAccountData = {
    * data - Data BOC or BOC handle
    */
   data: string;
+  /**
+   * allow_partial - Flag allowing partial BOC decoding when ABI doesn't describe the full body BOC. Controls decoder behaviour when after decoding all described in ABI params there are some data left in BOC: `true` - return decoded values `false` - return error of incomplete BOC deserialization (default)
+   */
+  allow_partial?: boolean;
 };
 
 export type ResultOfDecodeAccountData = {
@@ -515,6 +527,10 @@ export type ParamsOfDecodeInitialData = {
    * data - Data BOC or BOC handle
    */
   data: string;
+  /**
+   * allow_partial - Flag allowing partial BOC decoding when ABI doesn't describe the full body BOC. Controls decoder behaviour when after decoding all described in ABI params there are some data left in BOC: `true` - return decoded values `false` - return error of incomplete BOC deserialization (default)
+   */
+  allow_partial?: boolean;
 };
 
 export type ResultOfDecodeInitialData = {
@@ -542,4 +558,23 @@ export type ParamsOfDecodeBoc = {
 
 export type ResultOfDecodeBoc = {
   data: any;
+};
+
+export type ParamsOfAbiEncodeBoc = {
+  /**
+   * params - Parameters to encode into BOC
+   */
+  params: AbiParam[];
+  data: any;
+  /**
+   * boc_cache - Cache type to put the result.
+   */
+  boc_cache?: BocCacheType;
+};
+
+export type ResultOfAbiEncodeBoc = {
+  /**
+   * boc - BOC encoded as base64
+   */
+  boc: string;
 };

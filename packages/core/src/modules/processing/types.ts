@@ -15,7 +15,10 @@ export type ProcessingErrorCode =
   | "CanNotCheckBlockShard"
   | "BlockNotFound"
   | "InvalidData"
-  | "ExternalSignerMustNotBeUsed";
+  | "ExternalSignerMustNotBeUsed"
+  | "MessageRejected"
+  | "InvalidRempStatus"
+  | "NextRempStatusTimeout";
 
 /**
  * * WillFetchFirstBlock - Notifies the application that the account's current shard block will be fetched from the network. This step is performed before the message sending so that sdk knows starting from which block it will search for the transaction.
@@ -33,6 +36,16 @@ export type ProcessingErrorCode =
  * * FetchNextBlockFailed - Notifies the app that the next block can't be fetched.
  * 
  * * MessageExpired - Notifies the app that the message was not executed within expire timeout on-chain and will never be because it is already expired. The expiration timeout can be configured with `AbiConfig` parameters.
+ * 
+ * * RempSentToValidators - Notifies the app that the message has been delivered to the thread's validators
+ * 
+ * * RempIncludedIntoBlock - Notifies the app that the message has been successfully included into a block candidate by the thread's collator
+ * 
+ * * RempIncludedIntoAcceptedBlock - Notifies the app that the block candicate with the message has been accepted by the thread's validators
+ * 
+ * * RempOther - Notifies the app about some other minor REMP statuses occurring during message processing
+ * 
+ * * RempError - Notifies the app about any problem that has occured in REMP processing - in this case library switches to the fallback transaction awaiting scenario (sequential block reading).
  * 
 
 */
@@ -80,6 +93,34 @@ export type ProcessingEvent =
       type: "MessageExpired";
       message_id: string;
       message: string;
+      error: ClientError;
+    }
+  | {
+      type: "RempSentToValidators";
+      message_id: string;
+      timestamp: number;
+      json: any;
+    }
+  | {
+      type: "RempIncludedIntoBlock";
+      message_id: string;
+      timestamp: number;
+      json: any;
+    }
+  | {
+      type: "RempIncludedIntoAcceptedBlock";
+      message_id: string;
+      timestamp: number;
+      json: any;
+    }
+  | {
+      type: "RempOther";
+      message_id: string;
+      timestamp: number;
+      json: any;
+    }
+  | {
+      type: "RempError";
       error: ClientError;
     };
 

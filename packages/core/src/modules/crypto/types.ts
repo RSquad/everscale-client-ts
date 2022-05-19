@@ -25,7 +25,12 @@ export type CryptoErrorCode =
   | "CannotCreateCipher"
   | "EncryptDataError"
   | "DecryptDataError"
-  | "IvRequired";
+  | "IvRequired"
+  | "CryptoBoxNotRegistered"
+  | "InvalidCryptoBoxType"
+  | "CryptoBoxSecretSerializationError"
+  | "CryptoBoxSecretDeserializationError"
+  | "InvalidNonceSize";
 
 export type SigningBoxHandle = number;
 
@@ -50,14 +55,27 @@ export type EncryptionBoxInfo = {
   public?: any;
 };
 
-export type EncryptionAlgorithm = {
-  type: "AES";
-  value: AesParams;
-};
+export type EncryptionAlgorithm =
+  | {
+      type: "AES";
+      value: AesParamsEB;
+    }
+  | {
+      type: "ChaCha20";
+      value: ChaCha20ParamsEB;
+    }
+  | {
+      type: "NaclBox";
+      value: NaclBoxParamsEB;
+    }
+  | {
+      type: "NaclSecretBox";
+      value: NaclSecretBoxParamsEB;
+    };
 
 export type CipherMode = "CBC" | "CFB" | "CTR" | "ECB" | "OFB";
 
-export type AesParams = {
+export type AesParamsEB = {
   mode: CipherMode;
   key: string;
   iv?: string;
@@ -66,6 +84,110 @@ export type AesParams = {
 export type AesInfo = {
   mode: CipherMode;
   iv?: string;
+};
+
+export type ChaCha20ParamsEB = {
+  /**
+   * key - 256-bit key.
+   */
+  key: string;
+  /**
+   * nonce - 96-bit nonce.
+   */
+  nonce: string;
+};
+
+export type NaclBoxParamsEB = {
+  /**
+   * their_public - 256-bit key.
+   */
+  their_public: string;
+  /**
+   * secret - 256-bit key.
+   */
+  secret: string;
+  /**
+   * nonce - 96-bit nonce.
+   */
+  nonce: string;
+};
+
+export type NaclSecretBoxParamsEB = {
+  /**
+   * key - Secret key - unprefixed 0-padded to 64 symbols hex string
+   */
+  key: string;
+  /**
+   * nonce - Nonce in `hex`
+   */
+  nonce: string;
+};
+
+/**
+ * * RandomSeedPhrase - Creates Crypto Box from a random seed phrase. This option can be used if a developer doesn't want the seed phrase to leave the core library's memory, where it is stored encrypted.
+ * 
+ * * PredefinedSeedPhrase - Restores crypto box instance from an existing seed phrase. This type should be used when Crypto Box is initialized from a seed phrase, entered by a user.
+ * 
+ * * EncryptedSecret - Use this type for wallet reinitializations, when you already have `encrypted_secret` on hands. To get `encrypted_secret`, use `get_crypto_box_info` function after you initialized your crypto box for the first time.
+ * 
+
+*/
+export type CryptoBoxSecret =
+  | {
+      type: "RandomSeedPhrase";
+      dictionary: number;
+      wordcount: number;
+    }
+  | {
+      type: "PredefinedSeedPhrase";
+      phrase: string;
+      dictionary: number;
+      wordcount: number;
+    }
+  | {
+      type: "EncryptedSecret";
+      encrypted_secret: string;
+    };
+
+export type CryptoBoxHandle = number;
+
+export type BoxEncryptionAlgorithm =
+  | {
+      type: "ChaCha20";
+      value: ChaCha20ParamsCB;
+    }
+  | {
+      type: "NaclBox";
+      value: NaclBoxParamsCB;
+    }
+  | {
+      type: "NaclSecretBox";
+      value: NaclSecretBoxParamsCB;
+    };
+
+export type ChaCha20ParamsCB = {
+  /**
+   * nonce - 96-bit nonce.
+   */
+  nonce: string;
+};
+
+export type NaclBoxParamsCB = {
+  /**
+   * their_public - 256-bit key.
+   */
+  their_public: string;
+  /**
+   * nonce - 96-bit nonce.
+   */
+  nonce: string;
+};
+
+export type NaclSecretBoxParamsCB = {
+  /**
+   * nonce - Nonce in `hex`
+   */
+  nonce: string;
 };
 
 export type ParamsOfFactorize = {
@@ -352,6 +474,9 @@ export type ParamsOfNaclBoxOpen = {
    * encrypted - Data that must be decrypted.
    */
   encrypted: string;
+  /**
+   * nonce - Nonce
+   */
   nonce: string;
   /**
    * their_public - Sender's public key - unprefixed 0-padded to 64 symbols hex string
@@ -395,7 +520,7 @@ export type ParamsOfNaclSecretBoxOpen = {
    */
   nonce: string;
   /**
-   * key - Public key - unprefixed 0-padded to 64 symbols hex string
+   * key - Secret key - unprefixed 0-padded to 64 symbols hex string
    */
   key: string;
 };
@@ -607,8 +732,96 @@ export type ResultOfChaCha20 = {
   data: string;
 };
 
+export type ParamsOfCreateCryptoBox = {
+  /**
+   * secret_encryption_salt - Salt used for secret encryption. For example, a mobile device can use device ID as salt.
+   */
+  secret_encryption_salt: string;
+  secret: CryptoBoxSecret;
+};
+
+export type RegisteredCryptoBox = {
+  handle: CryptoBoxHandle;
+};
+
+/**
+ * To secure the password while passing it from application to the library,
+ *
+ * the library generates a temporary key pair, passes the pubkey
+ *
+ * to the passwordProvider, decrypts the received password with private key,
+ *
+ * and deletes the key pair right away.
+ *
+ *
+ *
+ * Application should generate a temporary nacl_box_keypair
+ *
+ * and encrypt the password with naclbox function using nacl_box_keypair.secret
+ *
+ * and encryption_public_key keys + nonce = 24-byte prefix of encryption_public_key.
+ */
+export type ParamsOfAppPasswordProvider = {
+  type: "GetPassword";
+  encryption_public_key: string;
+};
+
+export type ResultOfAppPasswordProvider = {
+  type: "GetPassword";
+  encrypted_password: string;
+  app_encryption_pubkey: string;
+};
+
+export type ResultOfGetCryptoBoxInfo = {
+  /**
+   * encrypted_secret - Secret (seed phrase) encrypted with salt and password.
+   */
+  encrypted_secret: string;
+};
+
+export type ResultOfGetCryptoBoxSeedPhrase = {
+  phrase: string;
+  dictionary: number;
+  wordcount: number;
+};
+
+export type ParamsOfGetSigningBoxFromCryptoBox = {
+  /**
+   * handle - Crypto Box Handle.
+   */
+  handle: number;
+  /**
+   * hdpath - HD key derivation path.
+   */
+  hdpath?: string;
+  /**
+   * secret_lifetime - Store derived secret for this lifetime (in ms). The timer starts after each signing box operation. Secrets will be deleted immediately after each signing box operation, if this value is not set.
+   */
+  secret_lifetime?: number;
+};
+
 export type RegisteredSigningBox = {
   handle: SigningBoxHandle;
+};
+
+export type ParamsOfGetEncryptionBoxFromCryptoBox = {
+  /**
+   * handle - Crypto Box Handle.
+   */
+  handle: number;
+  /**
+   * hdpath - HD key derivation path.
+   */
+  hdpath?: string;
+  algorithm: BoxEncryptionAlgorithm;
+  /**
+   * secret_lifetime - Store derived secret for encryption algorithm for this lifetime (in ms). The timer starts after each encryption box operation. Secrets will be deleted (overwritten with zeroes) after each encryption operation, if this value is not set.
+   */
+  secret_lifetime?: number;
+};
+
+export type RegisteredEncryptionBox = {
+  handle: EncryptionBoxHandle;
 };
 
 /**
@@ -664,10 +877,6 @@ export type ResultOfSigningBoxSign = {
    * signature - Data signature.
    */
   signature: string;
-};
-
-export type RegisteredEncryptionBox = {
-  handle: EncryptionBoxHandle;
 };
 
 /**

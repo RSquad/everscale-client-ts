@@ -26,6 +26,8 @@ import {
   ResultOfDecodeTvc,
   ParamsOfEncodeTvc,
   ResultOfEncodeTvc,
+  ParamsOfEncodeExternalInMessage,
+  ResultOfEncodeExternalInMessage,
   ParamsOfGetCompilerVersion,
   ResultOfGetCompilerVersion,
 } from "./types";
@@ -181,7 +183,7 @@ export class BocModule {
   }
 
   /**
-   * Encodes bag of cells (BOC) with builder operations. This method provides the same functionality as Solidity TvmBuilder. Resulting BOC of this method can be passed into Solidity and C++ contracts as TvmCell type
+   * Encodes bag of cells (BOC) with builder operations. This method provides the same functionality as Solidity TvmBuilder. Resulting BOC of this method can be passed into Solidity and C++ contracts as TvmCell type.
    *
    * @param {ParamsOfEncodeBoc} param - parameters
    * @returns ResultOfEncodeBoc
@@ -231,6 +233,21 @@ export class BocModule {
    */
   encode_tvc(params: ParamsOfEncodeTvc): Promise<ResultOfEncodeTvc> {
     return this.tonClient.request("boc.encode_tvc", params);
+  }
+
+  /**
+   * Encodes a message
+   *
+   * @remarks
+   * Allows to encode any external inbound message.
+   *
+   * @param {ParamsOfEncodeExternalInMessage} param - parameters
+   * @returns ResultOfEncodeExternalInMessage
+   */
+  encode_external_in_message(
+    params: ParamsOfEncodeExternalInMessage
+  ): Promise<ResultOfEncodeExternalInMessage> {
+    return this.tonClient.request("boc.encode_external_in_message", params);
   }
 
   /**

@@ -55,7 +55,7 @@ export type ClientConfig = {
 
 export type NetworkConfig = {
   /**
-   * server_address - DApp Server public address. For instance, for `net.ton.dev/graphql` GraphQL endpoint the server address will be net.ton.dev
+   * server_address - **This field is deprecated, but left for backward-compatibility.** DApp Server public address.
    */
   server_address?: string;
   /**
@@ -107,10 +107,24 @@ export type NetworkConfig = {
    */
   query_timeout?: number;
   /**
+   * queries_protocol - Queries protocol.
+   */
+  queries_protocol?: NetworkQueriesProtocol;
+  /**
+   * first_remp_status_timeout - UNSTABLE.
+   */
+  first_remp_status_timeout?: number;
+  /**
+   * next_remp_status_timeout - UNSTABLE.
+   */
+  next_remp_status_timeout?: number;
+  /**
    * access_key - Access key to GraphQL API.
    */
   access_key?: string;
 };
+
+export type NetworkQueriesProtocol = "HTTP" | "WS";
 
 export type CryptoConfig = {
   /**
