@@ -2,6 +2,7 @@ import { TonClient } from "../..";
 import {
   ResultOfGetApiReference,
   ResultOfVersion,
+  ClientConfig,
   ResultOfBuildInfo,
   ParamsOfResolveAppRequest,
 } from "./types";
@@ -27,6 +28,13 @@ export class ClientModule {
    */
   version(): Promise<ResultOfVersion> {
     return this.tonClient.request("client.version");
+  }
+
+  /**
+   * Returns Core Library API reference
+   */
+  config(): Promise<ClientConfig> {
+    return this.tonClient.request("client.config");
   }
 
   /**

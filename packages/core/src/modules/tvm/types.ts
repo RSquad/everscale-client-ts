@@ -60,12 +60,42 @@ export type AccountForExecutor =
     };
 
 export type TransactionFees = {
+  /**
+   * in_msg_fwd_fee - Deprecated.
+   */
   in_msg_fwd_fee: number;
+  /**
+   * storage_fee - Fee for account storage
+   */
   storage_fee: number;
+  /**
+   * gas_fee - Fee for processing
+   */
   gas_fee: number;
+  /**
+   * out_msgs_fwd_fee - Deprecated.
+   */
   out_msgs_fwd_fee: number;
+  /**
+   * total_account_fees - Deprecated.
+   */
   total_account_fees: number;
+  /**
+   * total_output - Deprecated because it means total value sent in the transaction, which does not relate to any fees.
+   */
   total_output: number;
+  /**
+   * ext_in_msg_fee - Fee for inbound external message import.
+   */
+  ext_in_msg_fee: number;
+  /**
+   * total_fwd_fees - Total fees the account pays for message forwarding
+   */
+  total_fwd_fees: number;
+  /**
+   * account_fees - Total account fees for the transaction execution. Compounds of storage_fee + gas_fee + ext_in_msg_fee + total_fwd_fees
+   */
+  account_fees: number;
 };
 
 export type ParamsOfRunExecutor = {
