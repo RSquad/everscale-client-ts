@@ -15,7 +15,8 @@ export type AbiErrorCode =
   | "InvalidAbi"
   | "InvalidFunctionId"
   | "InvalidData"
-  | "EncodeInitialDataFailed";
+  | "EncodeInitialDataFailed"
+  | "InvalidFunctionName";
 
 export type Abi =
   | {
@@ -221,6 +222,10 @@ export type ParamsOfEncodeMessageBody = {
    * processing_try_index - Processing try index.
    */
   processing_try_index?: number;
+  /**
+   * address - Destination address of the message
+   */
+  address?: string;
 };
 
 export type ResultOfEncodeMessageBody = {
@@ -577,4 +582,23 @@ export type ResultOfAbiEncodeBoc = {
    * boc - BOC encoded as base64
    */
   boc: string;
+};
+
+export type ParamsOfCalcFunctionId = {
+  abi: Abi;
+  /**
+   * function_name - Contract function name
+   */
+  function_name: string;
+  /**
+   * output - If set to `true` output function ID will be returned which is used in contract response. Default is `false`
+   */
+  output?: boolean;
+};
+
+export type ResultOfCalcFunctionId = {
+  /**
+   * function_id - Contract function ID
+   */
+  function_id: number;
 };

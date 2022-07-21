@@ -35,6 +35,10 @@ export type ExecutionOptions = {
    * transaction_lt - transaction logical time
    */
   transaction_lt?: number;
+  /**
+   * chksig_always_succeed - Overrides standard TVM behaviour. If set to `true` then CHKSIG always will return `true`.
+   */
+  chksig_always_succeed?: boolean;
 };
 
 /**

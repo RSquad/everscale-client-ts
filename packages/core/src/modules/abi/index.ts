@@ -27,6 +27,8 @@ import {
   ResultOfDecodeBoc,
   ParamsOfAbiEncodeBoc,
   ResultOfAbiEncodeBoc,
+  ParamsOfCalcFunctionId,
+  ResultOfCalcFunctionId,
 } from "./types";
 
 /**
@@ -271,5 +273,17 @@ export class AbiModule {
    */
   encode_boc(params: ParamsOfAbiEncodeBoc): Promise<ResultOfAbiEncodeBoc> {
     return this.tonClient.request("abi.encode_boc", params);
+  }
+
+  /**
+   * Calculates contract function ID by contract ABI
+   *
+   * @param {ParamsOfCalcFunctionId} param - parameters
+   * @returns ResultOfCalcFunctionId
+   */
+  calc_function_id(
+    params: ParamsOfCalcFunctionId
+  ): Promise<ResultOfCalcFunctionId> {
+    return this.tonClient.request("abi.calc_function_id", params);
   }
 }
